@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bomb Squad">
+<meta name="theme-color" content="#2A2957">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Bomb Squad — Worlds 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2A2957;--gold:#C9A84C;--dark:#0D0D1A;--darker:#080812;--card:#151528;--card2:#1A1A35;--text:#E8E8F0;--muted:#8888AA;--red:#F44336;--green:#4CAF50;--orange:#FF9800;--cyan:#00BCD4}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Source Sans 3',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}h1,h2,h3,.nav-label{font-family:'Oswald',sans-serif}
+.header{background:linear-gradient(135deg,var(--blue),#1E1E45);padding:16px 20px 12px;text-align:center;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(0,0,0,.5)}.header h1{font-size:22px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}.header .sub{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--blue);display:flex;z-index:100;border-top:2px solid var(--gold);padding-bottom:env(safe-area-inset-bottom,0)}.nav-btn{flex:1;padding:8px 4px 6px;text-align:center;color:var(--muted);border:none;background:none;cursor:pointer;transition:all .2s;font-family:'Source Sans 3',sans-serif}.nav-btn.active{color:var(--gold);background:rgba(201,168,76,.1)}.nav-btn .icon{font-size:20px;display:block}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.content{padding:16px 16px 80px}.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid rgba(201,168,76,.15)}.card h3{color:var(--gold);font-size:16px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}.card p{color:var(--muted);font-size:14px;line-height:1.5}.card a{color:var(--cyan);text-decoration:none}
+.tip-tile{background:linear-gradient(135deg,rgba(42,41,87,.6),rgba(42,41,87,.3));border-radius:12px;padding:12px 14px;margin-bottom:12px;border:1px solid rgba(201,168,76,.2);font-size:13px;color:var(--muted);line-height:1.5}.tip-tile strong{color:var(--gold)}
+.sched-day{font-family:'Oswald';font-size:18px;color:var(--gold);padding:12px 0 6px;border-bottom:1px solid rgba(201,168,76,.2);margin-bottom:8px}.sched-item{display:flex;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;gap:12px;align-items:flex-start}.sched-time{color:var(--gold);font-weight:600;min-width:75px;flex-shrink:0;font-size:13px}.sched-desc{flex:1}.sched-desc strong{color:var(--text)}.sched-desc .note{color:var(--muted);font-size:12px;display:block;margin-top:2px}.sched-item.critical{background:rgba(244,67,54,.08);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.critical .sched-time{color:var(--red)}.sched-item.highlight{background:rgba(201,168,76,.06);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.meal{background:rgba(76,175,80,.06);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.meal .sched-time{color:var(--green)}.uniform-tag{display:inline-block;background:rgba(42,41,87,.6);color:var(--cyan);font-size:11px;padding:2px 10px;border-radius:4px;margin-bottom:8px;font-weight:600}
+.filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.filter-btn{background:var(--card);color:var(--muted);border:1px solid rgba(201,168,76,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;font-family:'Source Sans 3',sans-serif}.filter-btn.active{background:var(--gold);color:var(--dark);border-color:var(--gold)}
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.link-card{background:var(--card);border-radius:12px;padding:16px 14px;text-align:center;text-decoration:none;border:1px solid rgba(201,168,76,.1);transition:all .15s}.link-card:active{transform:scale(.96);background:var(--card2)}.link-card .link-icon{font-size:28px;display:block;margin-bottom:6px}.link-card .link-label{color:var(--gold);font-family:'Oswald';font-size:13px;text-transform:uppercase;letter-spacing:.5px}.link-card .link-sub{color:var(--muted);font-size:11px;margin-top:2px}
+.countdown{background:linear-gradient(135deg,var(--blue),#3D3D80);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;border:2px solid var(--gold)}.countdown h2{color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:3px;margin-bottom:12px}.countdown-nums{display:flex;justify-content:center;gap:16px}.cd-unit{text-align:center}.cd-num{font-family:'Oswald';font-size:42px;color:white;font-weight:700;line-height:1}.cd-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.meal-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid var(--green)}.meal-card h4{color:var(--green);font-family:'Oswald';font-size:15px;text-transform:uppercase}.meal-card p{color:var(--muted);font-size:13px;line-height:1.5;margin-top:4px}.meal-card .cost{color:var(--gold);font-weight:700}
+.wx-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}.wx-card{background:var(--card);border-radius:12px;padding:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;-webkit-tap-highlight-color:transparent}.wx-card:active{transform:scale(.98)}.wx-card.selected{border-color:var(--gold);background:var(--card2)}.wx-card .wx-loc{font-family:'Oswald';font-size:15px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.wx-card .wx-main{display:flex;align-items:center;gap:12px}.wx-card .wx-icon{font-size:36px;flex-shrink:0}.wx-card .wx-temp{font-family:'Oswald';font-size:38px;color:white;font-weight:700;line-height:1}.wx-card .wx-cond{font-size:13px;color:var(--muted)}.wx-card .wx-details{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:10px;font-size:12px;color:var(--muted)}.wx-card .wx-details span{display:flex;justify-content:space-between}.wx-card .wx-details .val{color:var(--text);font-weight:600}.wx-card .wx-updated{font-size:10px;color:var(--muted);margin-top:8px;opacity:.6}.wx-card.denied{border:1px dashed rgba(201,168,76,.3);cursor:default}.wx-card.denied .wx-loc{color:var(--muted)}.wx-card.loading .wx-main{opacity:.5}
+.wx-detail{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(201,168,76,.2)}.wx-detail h3{color:var(--gold);font-family:'Oswald';font-size:16px;margin-bottom:12px;text-transform:uppercase}.wx-hourly{display:flex;gap:2px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}.wx-hour{background:var(--card2);border-radius:8px;padding:8px 6px;text-align:center;min-width:56px;flex-shrink:0}.wx-hour .hr-time{font-size:11px;color:var(--muted);font-weight:600}.wx-hour .hr-icon{font-size:18px;margin:4px 0}.wx-hour .hr-temp{font-size:14px;font-weight:700;color:var(--text)}.wx-hour .hr-rain{font-size:10px;color:var(--cyan)}.wx-hour .hr-wind{font-size:10px;color:var(--muted)}
+.wx-trip-day{background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}.wx-trip-day .td-date{min-width:80px}.wx-trip-day .td-date .td-dow{font-family:'Oswald';font-size:14px;color:var(--gold)}.wx-trip-day .td-date .td-dt{font-size:12px;color:var(--muted)}.wx-trip-day .td-icon{font-size:28px;flex-shrink:0}.wx-trip-day .td-temps{font-family:'Oswald';font-size:18px;color:white;min-width:70px}.wx-trip-day .td-temps .td-lo{color:var(--muted);font-size:14px}.wx-trip-day .td-info{flex:1;font-size:12px;color:var(--muted);line-height:1.4}.wx-trip-day.placeholder{opacity:.5;border:1px dashed rgba(201,168,76,.2)}
+.wx-radar{border-radius:12px;overflow:hidden;margin-bottom:16px;position:relative;background:var(--card)}.wx-radar img{width:100%;display:block;border-radius:12px}.wx-radar .radar-label{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.7);color:var(--gold);font-size:11px;padding:3px 8px;border-radius:4px;font-weight:600}
+.wx-local-links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}.wx-local-link{background:var(--card);border-radius:10px;padding:12px;text-align:center;text-decoration:none;border:1px solid rgba(201,168,76,.1)}.wx-local-link .wll-icon{font-size:22px;display:block;margin-bottom:4px}.wx-local-link .wll-label{color:var(--cyan);font-size:12px;font-weight:600}
+.wx-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--muted);border-top-color:var(--gold);border-radius:50%;animation:wxspin .8s linear infinite}@keyframes wxspin{to{transform:rotate(360deg)}}
+@media(min-width:500px){.wx-cards{grid-template-columns:1fr 1fr 1fr}}
+@media(min-width:600px){.content{max-width:600px;margin:0 auto}.link-grid{grid-template-columns:1fr 1fr 1fr}}
+/* === LOCATION CARDS === */
+.loc-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:16px}
+.loc-card{background:var(--card);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,.1);transition:all .15s;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.loc-card:active{transform:scale(.98);background:var(--card2);border-color:var(--gold)}
+.loc-card .loc-icon{font-size:22px;min-width:30px;text-align:center}
+.loc-card .loc-info{flex:1;min-width:0}
+.loc-card .loc-name{font-weight:700;font-size:14px;display:block;margin-bottom:2px}
+.loc-card .loc-addr{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+.loc-card .loc-detail{font-size:11px;color:var(--cyan);display:block}
+.loc-card .loc-arrow{color:var(--gold);font-size:14px}
+.loc-note{color:var(--cyan);text-decoration:none;border-bottom:1px dotted var(--cyan)}
+.loc-note:active{color:var(--gold)}
+/* === PRESCOUTING === */
+.ps-setup{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;border:2px solid var(--gold);text-align:center}
+.ps-setup h3{color:var(--gold);font-family:'Oswald';font-size:18px;margin-bottom:8px}
+.ps-setup p{color:var(--muted);font-size:13px;margin-bottom:12px}
+.ps-input{width:100%;padding:12px 14px;background:var(--card2);border:1px solid rgba(201,168,76,.3);border-radius:10px;color:var(--text);font-size:16px;font-family:'Source Sans 3',sans-serif;text-transform:uppercase;text-align:center;letter-spacing:1px}
+.ps-input:focus{outline:none;border-color:var(--gold)}
+.ps-btn{background:var(--gold);color:var(--dark);border:none;border-radius:10px;padding:12px 24px;font-family:'Oswald';font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:10px;width:100%}
+.ps-btn:active{transform:scale(.97)}
+.ps-status{font-size:12px;color:var(--muted);margin-top:8px}
+.ps-instructions{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid var(--cyan)}
+.ps-instructions h3{color:var(--cyan);font-family:'Oswald';font-size:15px;text-transform:uppercase;margin-bottom:8px}
+.ps-instructions ol{color:var(--muted);font-size:13px;line-height:1.8;padding-left:20px}
+.ps-instructions ol li{margin-bottom:4px}
+.ps-instructions .ps-tip{color:var(--gold);font-weight:600}
+.ps-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.ps-team{background:var(--card);border-radius:12px;padding:14px;border:1px solid rgba(201,168,76,.1);display:flex;gap:12px;align-items:flex-start}
+.ps-team .ps-num{font-family:'Oswald';font-size:32px;font-weight:700;color:var(--gold);min-width:55px;line-height:1}
+.ps-team .ps-info{flex:1;min-width:0}
+.ps-team .ps-name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ps-team .ps-loc{font-size:11px;color:var(--muted)}
+.ps-team .ps-stats{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.ps-stat{background:var(--card2);border-radius:6px;padding:3px 10px;font-size:12px}
+.ps-stat .ps-stat-label{color:var(--muted);font-size:10px}
+.ps-stat .ps-stat-val{color:var(--text);font-weight:700;margin-left:4px;font-size:14px}
+.ps-stat.epa-top1{background:rgba(33,150,243,.2);border:1px solid rgba(33,150,243,.4)}
+.ps-stat.epa-top1 .ps-stat-val{color:#2196F3}
+.ps-stat.epa-top10{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3)}
+.ps-stat.epa-top10 .ps-stat-val{color:#4CAF50}
+.ps-stat.epa-top25{background:rgba(139,195,74,.1);border:1px solid rgba(139,195,74,.3)}
+.ps-stat.epa-top25 .ps-stat-val{color:#8BC34A}
+.ps-team .ps-awards{margin-top:6px;font-size:11px;color:var(--orange)}
+.ps-team .ps-btns{display:flex;gap:6px;margin-top:8px}
+.ps-team .ps-link{background:var(--card2);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--cyan);text-decoration:none;font-weight:600;display:inline-block;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ps-team .ps-link:active{transform:scale(.94);background:rgba(201,168,76,.15)}
+.ps-team .ps-link:active{background:var(--blue)}
+.ps-filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.ps-count{font-size:12px;color:var(--muted);margin-bottom:10px}
+.ps-search{width:100%;padding:10px 14px;background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:10px;color:var(--text);font-size:15px;margin-bottom:12px;font-family:'Source Sans 3',sans-serif}
+.ps-search::placeholder{color:var(--muted)}
+.ps-search:focus{outline:none;border-color:var(--gold)}
+@media(min-width:450px){.ps-grid{grid-template-columns:1fr 1fr}}</style>
+</head>
+<body>
+<div class="header"><h1>💣 Bomb Squad</h1><div class="sub">2026 FIRST World Championship — Houston, TX</div></div>
+<div class="content">
+<div class="tab active" id="tab-home">
+<div class="tip-tile">💡 <strong>Home</strong> — Your trip dashboard. Start here for the countdown, key reminders, official schedules, and tappable location cards for every stop on the trip. Tap any address to open it in Google Maps.</div>
+<div class="countdown" id="countdown-box"><h2>Countdown to Worlds</h2><div class="countdown-nums" id="countdown-nums"></div></div>
+<div class="card"><h3>💣 Welcome to Command Center</h3><p>This is your one-stop app for the 2026 FIRST World Championship in Houston. Everything you need is here — schedule, meals, maps, weather, and prescouting.<br><br><strong>How to use:</strong> Tap the tabs at the bottom to navigate. Every address is tappable — tap it to open Google Maps with directions. On the Scout tab, load a division to see team stats and start prescouting homework.<br><br><strong>Bookmark this page</strong> on your phone so you can pull it up all week!</p></div>
+<div class="card"><h3>📋 Official Schedules</h3><p>
+<a href="https://community.firstinspires.org/hubfs/web/event/2026/cmp/frc/public-schedule.pdf" target="_blank">📄 FIRST Official FRC Schedule (PDF)</a><br>
+<a href="itinerary.pdf" target="_blank">📄 Our Itinerary — Download & Print</a><br>
+<a href="driver.pdf" target="_blank">🚌 Driver Itinerary — Mindy & Craig (Village Travel)</a><br><br>
+<span style="color:var(--muted);font-size:12px">Revised Apr 7, 2026 — All times subject to change</span></p></div>
+<div class="card"><h3>⚠️ Things to Remember</h3>
+<p><strong style="color:var(--gold)">👥 GROUPS OF 3 — ALWAYS.</strong><br>Never go anywhere alone or in pairs — especially outside the venue. Three or more at all times, no exceptions.<br><br>
+
+<strong style="color:var(--gold)">💣 Who We Are</strong><br>You represent FRC Team 16 — the Bomb Squad. Hall of Fame. World Champions. 30 years of excellence from Mountain Home, Arkansas. Every person you meet, every interaction you have, reflects on our team, our school, and our community. Carry that legacy with pride.<br><br>
+
+<strong style="color:var(--gold)">🤝 Gracious Professionalism</strong><br>This is the heart of FIRST — competing fiercely while treating everyone with respect. Cheer for great plays even when they're not ours. Help a team that's struggling. Win with humility, lose with grace. The way we treat people matters more than any trophy.<br><br>
+
+<strong style="color:var(--gold)">🎒 Packing Checklist</strong><br>
+✅ Navy Bomb Squad shirt (Thu–Sat)<br>
+✅ Robot shirt (Wed)<br>
+✅ Belt — dress code is enforced<br>
+✅ Closed-toe shoes (required in pits)<br>
+✅ Deodorant — it's Houston in April<br>
+✅ Phone charger / battery pack<br>
+✅ Water bottle (refill stations at GRB)<br>
+✅ Light jacket (venue AC is cold)<br>
+✅ Rain gear<br>
+✅ Sunscreen<br>
+✅ Any medications you need<br><br>
+
+<strong style="color:var(--gold)">📋 Team & School Rules</strong><br>
+• All school rules and Bomb Squad policies are in effect<br>
+• Bed check is mandatory — be in your room on time<br>
+• No leaving the hotel after bed check<br>
+• Stay with your group — no wandering off<br>
+• Be on time. If you're early, you're on time. If you're on time, you're late.<br>
+• Keep your area clean — hotel rooms AND pit<br>
+• Represent us well — be polite, say thank you, hold the door<br><br>
+
+<strong style="color:var(--gold)">📱 Check Slack Often!</strong><br>
+All trip updates, schedule changes, and announcements go through Slack. Keep notifications on and check the <strong>#world_champs</strong> channel regularly.<br><br>
+
+<strong style="color:var(--gold)">📞 Emergency Contacts</strong><br>
+Mr. B (J.R.): <a href="tel:8704054826">(870) 405-4826</a><br>
+Mr. Young (Bradford): <a href="tel:8704040102">(870) 404-0102</a><br><br>
+
+<strong>Transportation:</strong> Village Travel — stay with the bus!<br>
+<span style="color:var(--red);font-weight:700">NO WiFi HOTSPOTS</span> at venue — use USB tethering<br>
+Convention center is <strong>CASH FREE</strong> — bring a card or preload a Visa gift card</p>
+</div>
+<div id="home-notes"></div>
+<h3 style="color:var(--gold);font-family:Oswald;font-size:16px;margin:16px 0 8px;text-transform:uppercase">📍 Trip Locations</h3>
+<div class="loc-grid" style="grid-template-columns:1fr">
+<a class="loc-card" href="https://maps.google.com/?q=1439+College+St+Mountain+Home+AR+72653" target="_blank"><span class="loc-icon">🏫</span><span class="loc-info"><span class="loc-name">The Bomb Shelter</span><span class="loc-addr">1439 College St, Mountain Home, AR 72653</span><span class="loc-detail">Tuesday 4:00 AM departure</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=1920+N+Sam+Houston+Pkwy+E+Houston+TX+77032" target="_blank"><span class="loc-icon">🏨</span><span class="loc-info"><span class="loc-name">Holiday Inn Express &amp; Suites Houston IAH</span><span class="loc-addr">1920 N Sam Houston Pkwy E, Houston, TX 77032</span><span class="loc-detail">Hotel · Breakfast 6–9 AM · 📞 1-346-209-6027</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=George+R+Brown+Convention+Center+Houston+TX" target="_blank"><span class="loc-icon">🏟️</span><span class="loc-info"><span class="loc-name">George R. Brown Convention Center</span><span class="loc-addr">1001 Avenida De Las Americas, Houston, TX 77010</span><span class="loc-detail">Competition venue · Quiet Room: Level 3, 362CF</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=Mias+Table+3131+Argonne+St+Houston+TX" target="_blank"><span class="loc-icon">🍽️</span><span class="loc-info"><span class="loc-name">Mia's Table — Upper Kirby</span><span class="loc-addr">3131 Argonne St, Houston, TX 77098</span><span class="loc-detail">Tue dinner w/ Breakaway · 📞 713-522-6427</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=The+Galleria+5085+Westheimer+Rd+Houston+TX" target="_blank"><span class="loc-icon">🛍️</span><span class="loc-info"><span class="loc-name">Galleria Mall Food Court</span><span class="loc-addr">5085 Westheimer Rd, Houston, TX 77056</span><span class="loc-detail">Wed lunch · On your own</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=Pappas+BBQ+7007+Hwy+59+Houston+TX" target="_blank"><span class="loc-icon">🍖</span><span class="loc-info"><span class="loc-name">Pappas Bar-B-Q</span><span class="loc-addr">7007 Hwy 59 S, Houston, TX 77074</span><span class="loc-detail">Wed dinner · $15 prepay · 📞 713-772-4557</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=Velvet+Taco+2626+West+Loop+South+Houston+TX" target="_blank"><span class="loc-icon">🌮</span><span class="loc-info"><span class="loc-name">Velvet Taco</span><span class="loc-addr">2626 W Loop S, Houston, TX 77027</span><span class="loc-detail">Thu dinner · $15 prepay · 📞 832-930-3571</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=Portillos+7511+FM+1960+Houston+TX" target="_blank"><span class="loc-icon">🌭</span><span class="loc-info"><span class="loc-name">Portillo's</span><span class="loc-addr">7511 FM 1960 Rd W, Houston, TX 77070</span><span class="loc-detail">Fri dinner · $20–$25 on your own · 📞 281-800-3781</span></span><span class="loc-arrow">›</span></a>
+<a class="loc-card" href="https://maps.google.com/?q=Hilton+Americas+Houston+TX" target="_blank"><span class="loc-icon">🏢</span><span class="loc-info"><span class="loc-name">Hilton Americas — Houston</span><span class="loc-addr">1600 Lamar St, Houston, TX 77010</span><span class="loc-detail">Fri — FIRST Leadership Award · Doors 11:15 AM</span></span><span class="loc-arrow">›</span></a>
+</div>
+</div>
+<div class="tab" id="tab-schedule">
+<div class="tip-tile">📅 <strong>Schedule</strong> — Full day-by-day itinerary from departure to return. Use the filter buttons to jump to a specific day. <strong>Gold items</strong> are key moments, <strong>red items</strong> are deadlines (pit closings, bed check). Tap any address or restaurant name to open it in Maps.</div>
+<div class="filter-bar"><button class="filter-btn active" onclick="filterSched('all')">All</button><button class="filter-btn" onclick="filterSched('tue')">Tue</button><button class="filter-btn" onclick="filterSched('wed')">Wed</button><button class="filter-btn" onclick="filterSched('thu')">Thu</button><button class="filter-btn" onclick="filterSched('fri')">Fri</button><button class="filter-btn" onclick="filterSched('sat')">Sat</button></div>
+<div id="schedule-list"></div>
+</div>
+<div class="tab" id="tab-matches">
+<div class="tip-tile">⚔️ <strong>Matches</strong> — Look up any team's match schedule at Worlds. <strong>Step 1:</strong> Select your division from the dropdown. <strong>Step 2:</strong> Tap a team button to load their matches. Use <strong>+ ADD</strong> to look up any team by number. Scores and W/L records update live once matches are played. Your team is highlighted in <strong style="color:var(--gold)">gold</strong>.</div>
+<div style="margin-bottom:12px">
+<select id="mx-event" onchange="mxLoadEvent()" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:10px;color:var(--text);font-size:15px;font-family:'Source Sans 3',sans-serif">
+<option value="">Select Division...</option>
+<option value="2026arc">Archimedes</option>
+<option value="2026cur">Curie</option>
+<option value="2026dal">Daly</option>
+<option value="2026gal">Galileo</option>
+<option value="2026hop">Hopper</option>
+<option value="2026joh">Johnson</option>
+<option value="2026mil">Milstein</option>
+<option value="2026new">Newton</option>
+</select>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap" id="mx-team-btns">
+<button class="filter-btn active" onclick="mxSelectTeam(16,this)" data-team="16">16 Bomb Squad</button>
+<button class="filter-btn" onclick="mxSelectTeam(3937,this)" data-team="3937">3937 Breakaway</button>
+<button class="filter-btn" onclick="mxSelectTeam(4635,this)" data-team="4635">4635 Botbusters</button>
+<button class="filter-btn" onclick="mxSelectTeam(8044,this)" data-team="8044">8044 Denham Venom</button>
+<button class="filter-btn" onclick="mxSelectTeam(9067,this)" data-team="9067">9067 Goonies</button>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<input type="number" id="mx-custom-team" placeholder="Team #" style="flex:1;padding:10px 14px;background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:10px;color:var(--text);font-size:15px;font-family:'Source Sans 3',sans-serif">
+<button onclick="mxAddCustomTeam()" style="background:var(--gold);color:var(--dark);border:none;border-radius:10px;padding:10px 16px;font-family:Oswald;font-size:14px;cursor:pointer">+ ADD</button>
+</div>
+<div id="mx-status" style="color:var(--muted);font-size:13px;margin-bottom:8px"></div>
+<div id="mx-results"></div>
+</div>
+<div class="tab" id="tab-meals">
+<div class="tip-tile">🍽️ <strong>Meals</strong> — Every meal for the trip with restaurant details, menus, and costs. Tap any address to get directions or any phone number to call. Items marked <strong style="color:var(--green)">$15 prepay</strong> are covered — bring cash for "on your own" meals. <strong style="color:var(--red)">Inside GRB is CARD ONLY — no cash!</strong> Food trucks outside accept cash.</div>
+<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">MEALS &amp; RESTAURANTS</h2>
+<div class="meal-card"><h4>🍽️ Tuesday — Dinner with Breakaway</h4><p><a class="loc-note" href="https://maps.google.com/?q=Mias+Table+3131+Argonne+St+Houston+TX" target="_blank">Mia's Table — Upper Kirby<br>3131 Argonne St, Houston, TX 77098</a><br>📞 <a href="tel:17135226427" style="color:var(--cyan)">713-522-6427</a><br><span class="cost">On your own</span><br><br>🍽️ Dinner with Team 3937 Breakaway! Mia's Table is a Houston comfort food spot — burgers, fried chicken, salads, sandwiches, and more.<br><br><a href="https://www.miastable.com/menu" target="_blank" style="color:var(--cyan)">📋 View menu →</a> · <a href="https://www.miastable.com/upper-kirby" target="_blank" style="color:var(--cyan)">🌐 Website</a></p></div>
+<div class="meal-card"><h4>🍔 Wednesday Lunch — Galleria Mall</h4><p><a class="loc-note" href="https://maps.google.com/?q=The+Galleria+5085+Westheimer+Rd+Houston+TX" target="_blank">Food Court at The Galleria<br>5085 Westheimer Rd, Houston</a><br><span class="cost">On your own</span><br><br><strong>Food Court Options:</strong><br>🐔 <a href="https://www.chick-fil-a.com/locations/tx/galleria-i" target="_blank" style="color:var(--cyan)">Chick-fil-A</a> — chicken sandwiches, nuggets, waffle fries<br>🍣 <a href="https://sushigamigalleria.com/" target="_blank" style="color:var(--cyan)">Sushigami</a> — conveyor belt sushi inside the mall<br>🌮 Mexican food, pizza, burgers near the ice skating rink<br>🥐 La Madeleine — French bakery &amp; cafe<br>🍽️ <a href="https://conservatorygalleria.com/" target="_blank" style="color:var(--cyan)">Conservatory Galleria</a> — food hall with 11 vendors (tacos, Korean wings, Pakistani street food, juice bar &amp; more)<br><br><a href="https://www.simon.com/mall/the-galleria/dining" target="_blank" style="color:var(--cyan)">📋 Full Galleria dining guide →</a></p></div>
+<div class="meal-card"><h4>🍖 Wednesday Dinner — Pappas Bar-B-Q</h4><p><a class="loc-note" href="https://maps.google.com/?q=Pappas+BBQ+7007+Hwy+59+Houston+TX" target="_blank">7007 Hwy 59 S, Houston, TX 77074</a><br>📞 <a href="tel:17137724557" style="color:var(--cyan)">713-772-4557</a><br><span class="cost">$15 prepay</span><br><br>🔥 Texas-style BBQ — brisket, ribs, sausage, pulled pork, turkey. Sides include coleslaw, beans, potato salad, and Texas toast.<br><br><a href="https://www.pappasbbq.com/menu/" target="_blank" style="color:var(--cyan)">📋 View menu →</a> · <a href="https://www.pappasbbq.com/" target="_blank" style="color:var(--cyan)">🌐 Website</a></p></div>
+<div class="meal-card"><h4>🌮 Thursday Dinner — Velvet Taco</h4><p><a class="loc-note" href="https://maps.google.com/?q=Velvet+Taco+2626+West+Loop+South+Houston+TX" target="_blank">2626 West Loop South, Houston, TX 77027</a><br>📞 <a href="tel:18329303571" style="color:var(--cyan)">832-930-3571</a><br><span class="cost">$15 prepay</span><br><br>🌮 Creative gourmet tacos — chicken tikka, Nashville hot tofu, spicy tikka, rotisserie chicken, plus weekly taco feature (WTF). Not your typical taco spot!<br><br><a href="https://www.velvettaco.com/menu" target="_blank" style="color:var(--cyan)">📋 View menu →</a> · <a href="https://www.velvettaco.com/" target="_blank" style="color:var(--cyan)">🌐 Website</a></p></div>
+<div class="meal-card"><h4>🌭 Friday Dinner — Portillo's</h4><p><a class="loc-note" href="https://maps.google.com/?q=Portillos+7511+FM+1960+Houston+TX" target="_blank">7511 FM 1960 Rd W, Houston, TX 77070</a><br>📞 <a href="tel:13464849447" style="color:var(--cyan)">346-484-9447</a><br><span class="cost">$20–$25 on your own</span><br><br>🌭 Famous Chicago-style eats — Italian beef sandwiches (get it dipped!), Chicago-style hot dogs, char-grilled burgers, cheese fries, and their legendary chocolate cake shake.<br><br><a href="https://order.portillos.com/menu/portillos-willowbrook" target="_blank" style="color:var(--cyan)">📋 View menu →</a> · <a href="https://www.portillos.com/" target="_blank" style="color:var(--cyan)">🌐 Website</a></p></div>
+<div class="card"><h3>☕ Breakfast</h3><p><strong>Tuesday:</strong> Hotel breakfast 6–9 AM<br><strong>Wed:</strong> Hotel breakfast 6–9 AM<br><strong>Thu–Sat:</strong> Grab from the bus at GRB (arrive 5:50 AM)</p></div>
+<div class="card"><h3>🍽️ Lunch (Thu, Fri, Sat)</h3><p><strong>Lunch is on your own every competition day — $20–$25</strong><br><br>Your options:<br>• <strong>Inside GRB Convention Center</strong> — multiple food vendors. <span style="color:var(--red);font-weight:700">⚠️ CARD ONLY — NO CASH!</span><br>• <strong>Food trucks outside</strong> around Discovery Green — cash accepted<br>• <strong>Nearby restaurants</strong> within walking distance<br><br>Eat during your division break and <strong>be back in time for your scouting or media shift!</strong></p></div>
+</div>
+<div class="tab" id="tab-weather">
+<div class="tip-tile">🌤️ <strong>Weather</strong> — Live weather for Houston and Mountain Home with trip forecasts. Tap the location buttons to switch cities. The <strong>radar map</strong> shows real-time rain — hit Play to animate. Trip forecast auto-populates as dates enter the forecast window. Pack for heat, humidity, and AC!</div>
+<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">WEATHER</h2>
+<div class="wx-cards" id="wx-cards"></div>
+<div id="wx-detail-panel"></div>
+<div id="wx-radar-panel"></div>
+<h3 style="color:var(--gold);font-family:Oswald;font-size:16px;margin:16px 0 10px;text-transform:uppercase">Trip Forecast — Apr 28 – May 3</h3>
+<div id="wx-trip-forecast"></div>
+<div class="card" style="margin-top:16px"><h3>📡 Local Weather Sources</h3>
+<div class="wx-local-links">
+<a class="wx-local-link" href="https://www.ky3.com/weather/" target="_blank"><span class="wll-icon">📺</span><span class="wll-label">KY3 Weather</span></a>
+<a class="wx-local-link" href="https://oz-weather.com/" target="_blank"><span class="wll-icon">🌪️</span><span class="wll-label">Garrett Lewis / OZ Weather</span></a>
+<a class="wx-local-link" href="https://weather.com/weather/tenday/l/Houston+TX" target="_blank"><span class="wll-icon">🌡️</span><span class="wll-label">Weather.com Houston</span></a>
+<a class="wx-local-link" href="https://forecast.weather.gov/MapClick.php?lat=29.7604&lon=-95.3698" target="_blank"><span class="wll-icon">🇺🇸</span><span class="wll-label">NWS Houston</span></a>
+</div></div>
+<div class="card"><h3>📝 Local Weather Notes</h3><p id="wx-notes-area" style="min-height:40px;font-style:italic">Late April in Houston: expect highs in the mid-80s°F with humidity around 70–80%. The convention center is air-conditioned but walks outside will be warm. Pack light clothing, sunscreen, water bottle, and a light jacket for indoor AC.</p></div>
+</div>
+<div class="tab" id="tab-scout">
+<div class="tip-tile">🔍 <strong>Prescouting</strong> — Your homework before Worlds. <strong>Step 1:</strong> Select your division from the dropdown. <strong>Step 2:</strong> Teams load with EPA and OPR stats from TBA and Statbotics. <strong>Step 3:</strong> Use the sort buttons to rank by EPA or OPR. <strong>Step 4:</strong> Tap 🔗 on any card to view their matches on TBA. Watch their best, worst, and one middle match using the instructions below.</div>
+<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">PRESCOUTING</h2>
+<div class="ps-instructions">
+<h3>📋 Match Watching Instructions</h3>
+<ol>
+<li>Find their <span class="ps-tip">BEST match</span> (highest score) — What are they capable of at peak performance?</li>
+<li>Find their <span class="ps-tip">WORST match</span> (lowest score) — What do they look like when things go wrong?</li>
+<li>Find <span class="ps-tip">ONE IN THE MIDDLE</span> — What does a typical match look like for them?</li>
+<li>Watch for: <span class="ps-tip">drivetrain, auto consistency, cycle times, climb reliability, defense ability</span></li>
+<li>After watching, tap the 📋 button on their card to fill out the scouting form</li>
+</ol>
+</div>
+<div class="ps-setup" id="ps-setup">
+<h3>🔍 Load Division Teams</h3>
+<p>Enter your division name to load all teams with EPA, OPR, and awards data</p>
+<select class="ps-input" id="ps-div-select" style="appearance:auto;-webkit-appearance:auto">
+<option value="">— Select Division —</option>
+<optgroup label="2026 Worlds (when assigned)">
+<option value="2026arc">Archimedes</option>
+<option value="2026cur">Curie</option>
+<option value="2026dal">Daly</option>
+<option value="2026gal">Galileo</option>
+<option value="2026hop">Hopper</option>
+<option value="2026joh">Johnson</option>
+<option value="2026mil">Milstein</option>
+<option value="2026new">Newton</option>
+</optgroup>
+<optgroup label="2025 Worlds (Practice)">
+<option value="2025arc">Archimedes (2025)</option>
+<option value="2025cur">Curie (2025)</option>
+<option value="2025dal">Daly (2025)</option>
+<option value="2025gal">Galileo (2025)</option>
+<option value="2025hop">Hopper (2025)</option>
+<option value="2025joh">Johnson (2025)</option>
+<option value="2025mil">Milstein (2025)</option>
+<option value="2025new">Newton (2025)</option>
+</optgroup>
+<optgroup label="Our 2026 Events (Practice)">
+<option value="2026arli">Arkansas Regional (2026)</option>
+<option value="2026lake">Bayou Regional (2026)</option>
+</optgroup>
+</select>
+<button class="ps-btn" onclick="psLoad()">Load Teams</button>
+<div class="ps-status" id="ps-status"></div>
+</div>
+<input type="text" class="ps-search" id="ps-search" placeholder="🔍 Search by team number or name..." oninput="psFilter()" style="display:none">
+<div class="ps-filter-bar" id="ps-filter-bar" style="display:none">
+<button class="filter-btn active" data-sort="number" onclick="psSortBy('number')">By Number</button>
+<button class="filter-btn" data-sort="epa" onclick="psSortBy('epa')">EPA</button>
+<button class="filter-btn" data-sort="opr" onclick="psSortBy('opr')">OPR</button>
+<button class="filter-btn" data-sort="name" onclick="psSortBy('name')">By Name</button>
+</div>
+<div class="ps-count" id="ps-count"></div>
+<div class="ps-grid" id="ps-grid"></div>
+</div>
+<div class="tab" id="tab-links">
+<div class="tip-tile">🔗 <strong>Quick Links</strong> — One-tap access to everything: The Blue Alliance, Statbotics, FIRST Events, venue maps, transit info, all 8 division pages, and our team pages. Bookmark these for the week — you'll use TBA and Statbotics constantly during competition.</div>
+<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">QUICK LINKS</h2>
+<div class="link-grid">
+<a class="link-card" href="https://www.thebluealliance.com/event/2026cmptx" target="_blank"><span class="link-icon">🔵</span><span class="link-label">TBA Worlds</span><span class="link-sub">Matches &amp; Rankings</span></a>
+<a class="link-card" href="https://www.statbotics.io/teams" target="_blank"><span class="link-icon">📊</span><span class="link-label">Statbotics</span><span class="link-sub">EPA Rankings</span></a>
+<a class="link-card" href="https://frc-events.firstinspires.org/2026/CMPTX" target="_blank"><span class="link-icon">🏆</span><span class="link-label">FIRST Events</span><span class="link-sub">Official Results</span></a>
+<a class="link-card" href="https://maps.google.com/?q=George+R+Brown+Convention+Center+Houston+TX" target="_blank"><span class="link-icon">📍</span><span class="link-label">Venue Map</span><span class="link-sub">GRB Center</span></a>
+<a class="link-card" href="https://maps.google.com/?q=1920+N+Sam+Houston+Pkwy+E+Houston+TX+77032" target="_blank"><span class="link-icon">🏨</span><span class="link-label">Hotel Map</span><span class="link-sub">Holiday Inn Express</span></a>
+<a class="link-card" href="https://www.team399.org/" target="_blank"><span class="link-icon">💃</span><span class="link-label">RoboProm</span><span class="link-sub">$45 — Mon 4/13 7PM</span></a>
+<a class="link-card" href="https://www.firstchampionship.org" target="_blank"><span class="link-icon">🎪</span><span class="link-label">Championship</span><span class="link-sub">Official Site</span></a>
+<a class="link-card" href="https://www.chiefdelphi.com" target="_blank"><span class="link-icon">💬</span><span class="link-label">Chief Delphi</span><span class="link-sub">Community Forum</span></a>
+<a class="link-card" href="https://www.thebluealliance.com/team/16/2026" target="_blank"><span class="link-icon">💣</span><span class="link-label">Team 16</span><span class="link-sub">Our TBA Page</span></a>
+<a class="link-card" href="https://www.thebluealliance.com/team/3937/2026" target="_blank"><span class="link-icon">🤝</span><span class="link-label">Team 3937</span><span class="link-sub">Breakaway</span></a>
+<a class="link-card" href="https://frcteam16.org" target="_blank"><span class="link-icon">🌐</span><span class="link-label">Our Website</span><span class="link-sub">frcteam16.org</span></a>
+</div>
+<div class="card" style="margin-top:16px"><h3>📱 Division Links</h3><p>
+<a href="https://www.thebluealliance.com/event/2026archimedes" target="_blank">Archimedes</a> · <a href="https://www.thebluealliance.com/event/2026curie" target="_blank">Curie</a> · <a href="https://www.thebluealliance.com/event/2026daly" target="_blank">Daly</a> · <a href="https://www.thebluealliance.com/event/2026galileo" target="_blank">Galileo</a><br>
+<a href="https://www.thebluealliance.com/event/2026hopper" target="_blank">Hopper</a> · <a href="https://www.thebluealliance.com/event/2026johnson" target="_blank">Johnson</a> · <a href="https://www.thebluealliance.com/event/2026milstein" target="_blank">Milstein</a> · <a href="https://www.thebluealliance.com/event/2026newton" target="_blank">Newton</a></p></div>
+</div>
+</div>
+<nav class="nav">
+<button class="nav-btn active" onclick="showTab('home')"><span class="icon">🏠</span><span class="nav-label">Home</span></button>
+<button class="nav-btn" onclick="showTab('schedule')"><span class="icon">📅</span><span class="nav-label">Schedule</span></button>
+<button class="nav-btn" onclick="showTab('matches')"><span class="icon">⚔️</span><span class="nav-label">Matches</span></button>
+<button class="nav-btn" onclick="showTab('meals')"><span class="icon">🍽️</span><span class="nav-label">Meals</span></button>
+<button class="nav-btn" onclick="showTab('weather')"><span class="icon">🌤️</span><span class="nav-label">Weather</span></button>
+<button class="nav-btn" onclick="showTab('scout')"><span class="icon">🔍</span><span class="nav-label">Scout</span></button>
+<button class="nav-btn" onclick="showTab('links')"><span class="icon">🔗</span><span class="nav-label">Links</span></button>
+</nav>
+<script>
+function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.currentTarget.classList.add('active');window.scrollTo(0,0);if(id==='weather')wxInit()}
+function updateCountdown(){const t=new Date('2026-04-28T04:00:00-05:00'),n=new Date(),d=t-n;if(d<=0){document.getElementById('countdown-box').innerHTML='<h2 style="color:var(--gold)">🏆 WE\'RE ON OUR WAY!</h2>';return}const dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4),ss=Math.floor(d%6e4/1e3);document.getElementById('countdown-nums').innerHTML='<div class="cd-unit"><div class="cd-num">'+dd+'</div><div class="cd-label">Days</div></div><div class="cd-unit"><div class="cd-num">'+hh+'</div><div class="cd-label">Hours</div></div><div class="cd-unit"><div class="cd-num">'+mm+'</div><div class="cd-label">Min</div></div><div class="cd-unit"><div class="cd-num">'+ss+'</div><div class="cd-label">Sec</div></div>'}
+updateCountdown();setInterval(updateCountdown,1000);
+const S=[{day:"Tuesday, April 28 — Travel Day",filter:"tue",uniform:"",items:[{time:"4:00 AM",desc:"Meet at the Bomb Shelter",note:"1439 College St, Mountain Home, AR 72653"},{time:"4:30 AM",desc:"Load bus"},{time:"4:45 AM",desc:"Depart Mountain Home for Houston",note:"~11 hour drive"},{time:"12:30 PM",desc:"Stop for lunch",note:"On your own",meal:true},{time:"~4:00 PM",desc:"Arrive at hotel — check in",note:"Holiday Inn Express IAH",hi:true},{time:"5:30 PM",desc:"Dinner with Breakaway at Mia\u2019s Table",note:"3131 Argonne St, Houston \u2022 On your own",meal:true},{time:"8:30 PM",desc:"Back to hotel"},{time:"10:30 PM",desc:"Bed Check",crit:true}]},{day:"Wednesday, April 29 — Load-In & Practice",filter:"wed",uniform:"Robot Shirt",items:[{time:"6:00–9:00 AM",desc:"Breakfast at hotel",meal:true},{time:"8:00 AM",desc:"Team Load-In begins (6 reps)",note:"FIRST official start",hi:true},{time:"10:00 AM",desc:"Inspection & Machine Shop Open"},{time:"10:15 AM",desc:"Meet in Lobby — Robot Shirt"},{time:"11:00 AM",desc:"Leave hotel for lunch"},{time:"11:00 AM",desc:"Lunch at Galleria Mall Food Court",note:"5085 Westheimer Rd, Houston",meal:true},{time:"12:00 PM",desc:"Pits Open / Practice Areas Open",note:"Full team access",hi:true},{time:"12:00–4:00 PM",desc:"Fields open for measurement & calibration"},{time:"1:00 PM",desc:"Leave lunch for venue",note:"GRB Convention Center"},{time:"3:00 PM",desc:"Hall of Fame Photo under banners",hi:true},{time:"4:00 PM",desc:"Driver's Meeting — Galileo Field",note:"Drivers report to stands"},{time:"4:30 PM",desc:"Hall of Fame Ceremony — Galileo Field",hi:true},{time:"5:00–7:00 PM",desc:"Practice Matches"},{time:"7:30 PM",desc:"Pits, Inspection, Machine Shop CLOSE",crit:true},{time:"8:00 PM",desc:"Dinner — Pappas Bar-B-Q ($15 prepay)",note:"7007 Hwy 59 S, Houston • 713-772-4557",meal:true},{time:"11:00 PM",desc:"Bed Check",crit:true}]},{day:"Thursday, April 30 — Quals Day 1",filter:"thu",uniform:"Navy Bomb Squad",items:[{time:"4:30 AM",desc:"Wake up call"},{time:"5:15 AM",desc:"Meet in lobby — Navy uniform"},{time:"5:50 AM",desc:"Arrive at GRB — Grab breakfast from bus",meal:true},{time:"7:00 AM",desc:"Pits & Machine Shop Open"},{time:"7:15–7:45 AM",desc:"Fields open for sensor calibration"},{time:"7:45 AM",desc:"Opening Ceremonies"},{time:"8:00 AM",desc:"QUALIFICATION MATCHES BEGIN",note:"All 8 divisions",hi:true},{time:"11:00–2:15",desc:"Division Breaks (staggered)",note:"Archimedes first, Newton last — check your division"},{time:"Div Break",desc:"LUNCH ON YOUR OWN ($20–$25)",note:"Inside GRB = CARD ONLY, NO CASH! Food trucks outside = cash OK. Be back for your scouting/media shift!",meal:true},{time:"6:00 PM",desc:"Qualification Matches end"},{time:"6:45 PM",desc:"Pits and Machine Shop CLOSE",crit:true},{time:"7:00 PM",desc:"Dinner — Velvet Taco ($15 prepay)",note:"2626 W Loop S, Houston • 832-930-3571",meal:true},{time:"7:00–10:00 PM",desc:"🎉 RoboProm (optional — $45 ticket)",note:"team399.org for tickets",hi:true},{time:"8:30 PM",desc:"Team Meeting + scouting review",note:"Non-RoboProm attendees"},{time:"10:30 PM",desc:"Bed Check",crit:true}]},{day:"Friday, May 1 — Quals Day 2 + Alliance Selection",filter:"fri",uniform:"Navy Bomb Squad",items:[{time:"4:30 AM",desc:"Wake up call"},{time:"5:15 AM",desc:"Meet in lobby — Navy uniform"},{time:"5:50 AM",desc:"Arrive at GRB — Grab breakfast from bus",meal:true},{time:"7:00 AM",desc:"Pits & Machine Shop Open"},{time:"7:45 AM",desc:"Opening Ceremonies (Volunteer of the Year)"},{time:"8:00 AM",desc:"QUALIFICATION MATCHES CONTINUE",hi:true},{time:"11:00–2:15",desc:"Division Breaks (reversed order from Thu)",note:"Newton first, Archimedes last"},{time:"Div Break",desc:"LUNCH ON YOUR OWN ($20–$25)",note:"Inside GRB = CARD ONLY, NO CASH! Food trucks outside = cash OK. Be back for your scouting/media shift!",meal:true},{time:"11:45 AM",desc:"FIRST Leadership Award — Hilton Americas",note:"Doors open 11:15 AM",hi:true},{time:"6:00 PM",desc:"Qualifications end"},{time:"6:45 PM",desc:"Pits and Machine Shop CLOSE",crit:true},{time:"7:00 PM",desc:"Dinner — Portillo's ($20–$25 on your own)",note:"7511 FM 1960 Rd W, Houston • 281-800-3781",meal:true},{time:"8:30 PM",desc:"Team Meeting + FINAL scouting review",note:"Build final pick list — THIS IS IT",hi:true},{time:"10:30 PM",desc:"Bed Check",crit:true}]},{day:"Saturday, May 2 — Playoffs & Einstein",filter:"sat",uniform:"Navy Bomb Squad — LOAD BUS WITH YOUR STUFF",items:[{time:"4:30 AM",desc:"Wake up & breakfast"},{time:"5:15 AM",desc:"Meet in lobby — Navy uniform",note:"⚠️ Load bus with ALL your stuff before leaving!",crit:true},{time:"5:50 AM",desc:"Arrive at GRB — Grab breakfast from bus",meal:true},{time:"7:00 AM",desc:"Pits and Machine Shop Open",note:"Close at 2:00 PM today"},{time:"7:15 AM",desc:"Opening Ceremonies + ALLIANCE SELECTION",note:"FIRST Impact Finalists announced",hi:true},{time:"8:30 AM",desc:"Division Playoff Matches begin",note:"Awards presented during playoffs",hi:true},{time:"8:30–4:00",desc:"Team Load Out",note:"Pack up pit when eliminated"},{time:"12:00 PM",desc:"LUNCH ON YOUR OWN ($20–$25)",note:"Inside GRB = CARD ONLY, NO CASH! Food trucks outside = cash OK. Be back for your scouting/media shift!",meal:true},{time:"2:00 PM",desc:"Pits and Machine Shop CLOSE",crit:true},{time:"2:00–6:30 PM",desc:"Einstein Tournament + Event Finale",note:"Woodie Flowers + Impact Award",hi:true},{time:"6:30 PM",desc:"Depart Houston for Mountain Home",note:"~11 hour drive",hi:true},{time:"~4:00 AM",desc:"Approximate arrival in Mountain Home",note:"Sunday, May 3"}]}];
+function renderSchedule(f){
+  var el=document.getElementById('schedule-list');var h='';
+  S.forEach(function(d){if(f!=='all'&&d.filter!==f)return;
+    h+='<div class="sched-day">'+d.day+'</div>';
+    if(d.uniform)h+='<div class="uniform-tag">👔 '+d.uniform+'</div>';
+    d.items.forEach(function(i){
+      var c=i.crit?'critical':i.meal?'meal':i.hi?'highlight':'';
+      var noteHtml=i.note?locLink(i.note):'';
+      var descHtml=locLink(i.desc);
+      h+='<div class="sched-item '+c+'"><div class="sched-time">'+i.time+'</div><div class="sched-desc"><strong>'+descHtml+'</strong>'+(noteHtml?'<span class="note">'+noteHtml+'</span>':'')+'</div></div>';
+    });
+  });el.innerHTML=h;
+}
+var LOCMAP=[
+  {pat:/1439 College St[^<]*/i,url:'https://maps.google.com/?q=1439+College+St+Mountain+Home+AR+72653'},
+  {pat:/Bomb Shelter/i,url:'https://maps.google.com/?q=1439+College+St+Mountain+Home+AR+72653'},
+  {pat:/Holiday Inn Express[^<]*/i,url:'https://maps.google.com/?q=1920+N+Sam+Houston+Pkwy+E+Houston+TX+77032'},
+  {pat:/GRB Convention Center|George R\. Brown/i,url:'https://maps.google.com/?q=George+R+Brown+Convention+Center+Houston+TX'},
+  {pat:/5085 Westheimer[^<]*/i,url:'https://maps.google.com/?q=The+Galleria+5085+Westheimer+Rd+Houston+TX'},
+  {pat:/Galleria Mall Food Court|Galleria Mall/i,url:'https://maps.google.com/?q=The+Galleria+5085+Westheimer+Rd+Houston+TX'},
+  {pat:/Discovery Green/i,url:'https://maps.google.com/?q=Discovery+Green+Houston+TX'},
+  {pat:/Mia[\u2019']s Table|3131 Argonne[^<]*/i,url:'https://maps.google.com/?q=Mias+Table+3131+Argonne+St+Houston+TX'},
+  {pat:/Pappas Bar-B-Q|7007 Hwy 59[^<]*/i,url:'https://maps.google.com/?q=Pappas+BBQ+7007+Hwy+59+Houston+TX'},
+  {pat:/Velvet Taco|2626 W Loop[^<]*/i,url:'https://maps.google.com/?q=Velvet+Taco+2626+West+Loop+South+Houston+TX'},
+  {pat:/Portillo[\u2019']s|7511 FM 1960[^<]*/i,url:'https://maps.google.com/?q=Portillos+7511+FM+1960+Houston+TX'},
+  {pat:/Hilton Americas/i,url:'https://maps.google.com/?q=Hilton+Americas+Houston+TX'}
+];
+function locLink(text){
+  var out=text;
+  LOCMAP.forEach(function(loc){
+    out=out.replace(loc.pat,function(m){return'<a class="loc-note" href="'+loc.url+'" target="_blank" onclick="event.stopPropagation()">'+m+'</a>'});
+  });
+  return out;
+}
+function filterSched(f){document.querySelectorAll('#tab-schedule .filter-btn').forEach(function(b){b.classList.remove('active')});event.currentTarget.classList.add('active');renderSchedule(f)}
+renderSchedule('all');
+
+/* ===== WEATHER ENGINE ===== */
+var WX={locations:[{id:'mh',name:'Mountain Home, AR',lat:36.3353,lon:-92.3843},{id:'hou',name:'Houston — GRB Center',lat:29.7520,lon:-95.3563},{id:'device',name:'Current Location',lat:null,lon:null}],tripDates:['2026-04-28','2026-04-29','2026-04-30','2026-05-01','2026-05-02','2026-05-03'],cacheMin:10,api:'https://api.open-meteo.com/v1/forecast'};
+var wxCache={},wxSel='hou',wxReady=false,wxStamp=0;
+var WI={0:'\u2600\uFE0F',1:'\uD83C\uDF24\uFE0F',2:'\u26C5',3:'\u2601\uFE0F',45:'\uD83C\uDF2B\uFE0F',48:'\uD83C\uDF2B\uFE0F',51:'\uD83C\uDF26\uFE0F',53:'\uD83C\uDF26\uFE0F',55:'\uD83C\uDF27\uFE0F',61:'\uD83C\uDF27\uFE0F',63:'\uD83C\uDF27\uFE0F',65:'\uD83C\uDF27\uFE0F',80:'\uD83C\uDF26\uFE0F',81:'\uD83C\uDF27\uFE0F',82:'\u26C8\uFE0F',95:'\u26C8\uFE0F',96:'\u26C8\uFE0F',99:'\u26C8\uFE0F',71:'\uD83C\uDF28\uFE0F',73:'\uD83C\uDF28\uFE0F',75:'\u2744\uFE0F'};
+var WD={0:'Clear sky',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Rime fog',51:'Light drizzle',53:'Mod. drizzle',55:'Dense drizzle',61:'Slight rain',63:'Moderate rain',65:'Heavy rain',80:'Rain showers',81:'Mod. showers',82:'Heavy showers',95:'Thunderstorm',96:'T-storm w/ hail',99:'Severe storm',71:'Light snow',73:'Mod. snow',75:'Heavy snow'};
+
+async function wxFetch(lat,lon){
+  var k=lat.toFixed(2)+','+lon.toFixed(2),now=Date.now();
+  if(wxCache[k]&&(now-wxCache[k].ts)<WX.cacheMin*60000)return wxCache[k].data;
+  var p=new URLSearchParams({latitude:lat,longitude:lon,current:'temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,surface_pressure,cloud_cover,is_day',hourly:'temperature_2m,precipitation_probability,weather_code,wind_speed_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,precipitation_probability_max',temperature_unit:'fahrenheit',wind_speed_unit:'mph',precipitation_unit:'inch',timezone:'America/Chicago',forecast_days:16});
+  try{var r=await fetch(WX.api+'?'+p);if(!r.ok)throw r.status;var d=await r.json();wxCache[k]={data:d,ts:now};return d}catch(e){console.error('WX:',e);return null}
+}
+
+function wxCard(loc,data){
+  if(loc.id==='device'&&!loc.lat)return '<div class="wx-card denied" data-id="device"><div class="wx-loc">\uD83D\uDCCD Current Location</div><div class="wx-main"><div class="wx-icon">\uD83D\uDCF5</div><div><div class="wx-cond">Location permission not granted</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Tap to retry</div></div></div></div>';
+  if(!data)return '<div class="wx-card loading" data-id="'+loc.id+'"><div class="wx-loc">'+loc.name+'</div><div class="wx-main"><div class="wx-spin"></div><span style="color:var(--muted);font-size:13px;margin-left:8px">Loading...</span></div></div>';
+  var c=data.current,sel=wxSel===loc.id?' selected':'';
+  return '<div class="wx-card'+sel+'" data-id="'+loc.id+'" onclick="wxSelect(\''+loc.id+'\')"><div class="wx-loc">'+loc.name+'</div><div class="wx-main"><div class="wx-icon">'+(WI[c.weather_code]||'\uD83C\uDF21\uFE0F')+'</div><div><div class="wx-temp">'+Math.round(c.temperature_2m)+'\u00B0</div><div class="wx-cond">'+(WD[c.weather_code]||'N/A')+'</div></div></div><div class="wx-details"><span>Feels like <span class="val">'+Math.round(c.apparent_temperature)+'\u00B0F</span></span><span>Humidity <span class="val">'+c.relative_humidity_2m+'%</span></span><span>Wind <span class="val">'+Math.round(c.wind_speed_10m)+' mph</span></span><span>Gusts <span class="val">'+(c.wind_gusts_10m?Math.round(c.wind_gusts_10m)+' mph':'\u2014')+'</span></span><span>Precip <span class="val">'+c.precipitation+'"</span></span><span>Pressure <span class="val">'+Math.round(c.surface_pressure)+' hPa</span></span><span>Clouds <span class="val">'+c.cloud_cover+'%</span></span></div><div class="wx-updated">Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</div></div>';
+}
+
+function wxHourly(data){
+  if(!data||!data.hourly)return'';var now=new Date(),hrs=data.hourly.time,si=hrs.findIndex(function(t){return new Date(t)>=now});if(si<0)si=0;var end=Math.min(si+24,hrs.length),h='<div class="wx-detail"><h3>Next 24 Hours</h3><div class="wx-hourly">';
+  for(var i=si;i<end;i++){var dt=new Date(hrs[i]),hr=dt.toLocaleTimeString('en-US',{hour:'numeric',hour12:true}),icon=WI[data.hourly.weather_code[i]]||'\uD83C\uDF21\uFE0F',temp=Math.round(data.hourly.temperature_2m[i]),rain=data.hourly.precipitation_probability[i],wind=Math.round(data.hourly.wind_speed_10m[i]);h+='<div class="wx-hour"><div class="hr-time">'+hr+'</div><div class="hr-icon">'+icon+'</div><div class="hr-temp">'+temp+'\u00B0</div>'+(rain>0?'<div class="hr-rain">\uD83D\uDCA7'+rain+'%</div>':'')+'<div class="hr-wind">'+wind+'mph</div></div>'}
+  return h+'</div></div>';
+}
+
+function wxTrip(data){
+  var el=document.getElementById('wx-trip-forecast'),dows=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],h='';
+  WX.tripDates.forEach(function(ds){var dt=new Date(ds+'T12:00:00'),dow=dows[dt.getDay()],lb=(dt.getMonth()+1)+'/'+dt.getDate();
+    if(!data||!data.daily){h+='<div class="wx-trip-day placeholder"><div class="td-date"><div class="td-dow">'+dow+'</div><div class="td-dt">'+lb+'</div></div><div class="td-icon">\uD83D\uDD2E</div><div class="td-temps">--\u00B0<span class="td-lo"> / --\u00B0</span></div><div class="td-info">Detailed forecast not available yet. Will auto-populate when dates enter forecast window.</div></div>';return}
+    var idx=data.daily.time.indexOf(ds);
+    if(idx<0){h+='<div class="wx-trip-day placeholder"><div class="td-date"><div class="td-dow">'+dow+'</div><div class="td-dt">'+lb+'</div></div><div class="td-icon">\uD83D\uDD2E</div><div class="td-temps">--\u00B0<span class="td-lo"> / --\u00B0</span></div><div class="td-info">Outside forecast window \u2014 will auto-populate closer to date.</div></div>';return}
+    var hi=Math.round(data.daily.temperature_2m_max[idx]),lo=Math.round(data.daily.temperature_2m_min[idx]),code=data.daily.weather_code[idx],rain=data.daily.precipitation_probability_max[idx],wind=Math.round(data.daily.wind_speed_10m_max[idx]),prec=data.daily.precipitation_sum[idx];
+    h+='<div class="wx-trip-day"><div class="td-date"><div class="td-dow">'+dow+'</div><div class="td-dt">'+lb+'</div></div><div class="td-icon">'+(WI[code]||'\uD83C\uDF21\uFE0F')+'</div><div class="td-temps">'+hi+'\u00B0<span class="td-lo"> / '+lo+'\u00B0</span></div><div class="td-info">'+(WD[code]||'')+' \u00B7 \uD83D\uDCA7'+rain+'% \u00B7 \uD83D\uDCA8'+wind+'mph'+(prec>0?' \u00B7 '+prec.toFixed(2)+'in':'')+'</div></div>'});
+  el.innerHTML=h;
+}
+
+async function wxRadar(lat,lon){
+  var p=document.getElementById('wx-radar-panel');
+  p.innerHTML='<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="color:var(--gold);font-family:Oswald;font-size:15px;text-transform:uppercase">\uD83D\uDEF0\uFE0F Live Radar</span><span id="radar-time" style="color:var(--muted);font-size:11px"></span></div><div id="radar-map" style="width:100%;height:350px;border-radius:12px;border:1px solid rgba(201,168,76,.2);z-index:0"></div><div style="display:flex;justify-content:center;gap:12px;margin-top:8px"><button id="radar-play" onclick="radarToggle()" style="background:var(--card2);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:6px 16px;color:var(--gold);font-family:Oswald;font-size:13px;cursor:pointer">\u25B6 Play</button><a href="https://www.rainviewer.com/map.html?loc='+lat+','+lon+',8" target="_blank" style="background:var(--card2);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:6px 16px;color:var(--cyan);font-family:Oswald;font-size:13px;text-decoration:none;display:inline-block">Full Map \u2192</a></div></div>';
+  // Load Leaflet if not already loaded
+  if(!window.L){
+    var css=document.createElement('link');css.rel='stylesheet';css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';document.head.appendChild(css);
+    await new Promise(function(res){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';s.onload=res;document.head.appendChild(s)});
+  }
+  // Init map
+  if(window._radarMap){window._radarMap.remove();window._radarMap=null}
+  var map=L.map('radar-map',{zoomControl:true,attributionControl:false,maxZoom:7,minZoom:4,bounceAtZoomLimits:false}).setView([lat,lon],6);
+  window._radarMap=map;
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:7}).addTo(map);
+  // Add a marker for the selected location
+  L.circleMarker([lat,lon],{radius:6,color:'#C9A84C',fillColor:'#C9A84C',fillOpacity:.8,weight:2}).addTo(map);
+  // Fetch RainViewer frames
+  try{
+    var rv=await(await fetch('https://api.rainviewer.com/public/weather-maps.json')).json();
+    var frames=rv.radar.past.concat(rv.radar.nowcast||[]);
+    var layers=[];
+    var curIdx=frames.length-1;
+    window._radarFrames=frames;window._radarLayers=layers;window._radarIdx=curIdx;window._radarPlaying=false;
+    // Pre-create tile layers for each frame
+    frames.forEach(function(f,i){
+      var layer=L.tileLayer('https://tilecache.rainviewer.com'+f.path+'/256/{z}/{x}/{y}/6/1_1.png',{opacity:i===curIdx?0.7:0,zIndex:2,maxZoom:7});
+      layer.addTo(map);layers.push(layer);
+    });
+    radarShowFrame(curIdx);
+  }catch(e){
+    document.getElementById('radar-time').textContent='Radar data unavailable';
+  }
+}
+function radarShowFrame(idx){
+  var layers=window._radarLayers,frames=window._radarFrames;
+  if(!layers||!frames)return;
+  layers.forEach(function(l,i){l.setOpacity(i===idx?0.7:0)});
+  window._radarIdx=idx;
+  var d=new Date(frames[idx].time*1000);
+  var h=d.getHours(),m=d.getMinutes(),ampm=h>=12?'PM':'AM';h=h%12||12;
+  var past=window._radarFrames.length-(window._radarFrames[window._radarFrames.length-1].time<=frames[idx].time?0:1);
+  var label=idx>=frames.length-(window._radarFrames.filter(function(f){return f.time>Date.now()/1000}).length||0)?'Forecast':'Past';
+  document.getElementById('radar-time').textContent=h+':'+(m<10?'0':'')+m+' '+ampm+' \u00B7 '+label;
+}
+function radarToggle(){
+  window._radarPlaying=!window._radarPlaying;
+  document.getElementById('radar-play').innerHTML=window._radarPlaying?'\u23F8 Pause':'\u25B6 Play';
+  if(window._radarPlaying)radarAnimate();
+}
+function radarAnimate(){
+  if(!window._radarPlaying)return;
+  var next=(window._radarIdx+1)%window._radarFrames.length;
+  radarShowFrame(next);
+  setTimeout(radarAnimate,next===window._radarFrames.length-1?1500:400);
+}
+
+function wxSelect(id){
+  wxSel=id;var loc=WX.locations.find(function(l){return l.id===id});if(!loc||!loc.lat)return;
+  document.querySelectorAll('.wx-card').forEach(function(c){c.classList.toggle('selected',c.dataset.id===id)});
+  var k=loc.lat.toFixed(2)+','+loc.lon.toFixed(2),cached=wxCache[k];
+  document.getElementById('wx-detail-panel').innerHTML=cached?wxHourly(cached.data):'';
+  wxTrip(cached?cached.data:null);wxRadar(loc.lat,loc.lon);
+}
+
+async function wxReverse(lat,lon){try{var r=await fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json&zoom=10');var d=await r.json();var a=d.address;if(a){var city=a.city||a.town||a.village||a.hamlet||a.county||'';var state=a.state||'';if(city&&state)return'\uD83D\uDCCD '+city+', '+state;if(city)return'\uD83D\uDCCD '+city;if(state)return'\uD83D\uDCCD '+state}return'\uD83D\uDCCD '+lat.toFixed(2)+'\u00B0, '+lon.toFixed(2)+'\u00B0'}catch(e){return'\uD83D\uDCCD '+lat.toFixed(2)+'\u00B0, '+lon.toFixed(2)+'\u00B0'}}
+
+async function wxInit(){
+  var now=Date.now();if(wxReady&&(now-wxStamp)<WX.cacheMin*60000)return;wxReady=true;wxStamp=now;
+  var box=document.getElementById('wx-cards'),dev=WX.locations.find(function(l){return l.id==='device'});
+  if(!dev.lat&&navigator.geolocation){try{var pos=await new Promise(function(res,rej){navigator.geolocation.getCurrentPosition(res,rej,{timeout:8000})});dev.lat=pos.coords.latitude;dev.lon=pos.coords.longitude;dev.name=await wxReverse(dev.lat,dev.lon)}catch(e){}}
+  box.innerHTML=WX.locations.map(function(l){return wxCard(l,null)}).join('');
+  var results=await Promise.all(WX.locations.map(function(l){return l.lat?wxFetch(l.lat,l.lon):Promise.resolve(null)}));
+  box.innerHTML=WX.locations.map(function(l,i){return wxCard(l,results[i])}).join('');
+  var si=WX.locations.findIndex(function(l){return l.id===wxSel}),sl=WX.locations[si];
+  if(sl&&sl.lat&&results[si]){document.getElementById('wx-detail-panel').innerHTML=wxHourly(results[si]);wxTrip(results[si]);wxRadar(sl.lat,sl.lon)}
+  else{var hi=WX.locations.findIndex(function(l){return l.id==='hou'});if(results[hi]){wxTrip(results[hi]);document.getElementById('wx-detail-panel').innerHTML=wxHourly(results[hi]);wxRadar(WX.locations[hi].lat,WX.locations[hi].lon)}else wxTrip(null)}
+  var dc=box.querySelector('.wx-card.denied');if(dc)dc.onclick=async function(){if(navigator.geolocation){try{var p=await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:8000})});dev.lat=p.coords.latitude;dev.lon=p.coords.longitude;dev.name=await wxReverse(dev.lat,dev.lon);wxReady=false;wxInit()}catch(e){}}}
+}
+
+/* ===== PRESCOUTING ENGINE ===== */
+var PS_CONFIG={
+  // UPDATE THIS: paste your Google Form URL and entry ID for team number
+  formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdqilvCkCgdVH40wp9X-x9wl2eR0Siuz6xdRhStQf2PBroLsw/viewform',
+  formTeamEntry: 'entry.792808158',
+  tbaKey: 'L20XKYmLjRSsbHPbKyVVXa21xgiRQnSwokWUvLDUUPwP1ymaWkPCbf3vNfFJDOzU',
+  tbaBase: 'https://www.thebluealliance.com/api/v3',
+  statBase: 'https://api.statbotics.io/v3'
+};
+var psTeams=[], psSort='number', psSortDir='desc', psDivision='';
+
+function psFormUrl(teamNum){
+  if(!PS_CONFIG.formUrl) return null;
+  return PS_CONFIG.formUrl+'?'+PS_CONFIG.formTeamEntry+'='+teamNum;
+}
+
+async function psFetchTBA(endpoint){
+  var r=await fetch(PS_CONFIG.tbaBase+endpoint,{headers:{'X-TBA-Auth-Key':PS_CONFIG.tbaKey}});
+  if(!r.ok)throw new Error(r.status);return r.json();
+}
+
+async function psFetchStat(endpoint){
+  try{var r=await fetch(PS_CONFIG.statBase+endpoint);if(!r.ok)return null;return r.json()}catch(e){return null}
+}
+
+var PS_DIV_NAMES={arc:'Archimedes',cur:'Curie',dal:'Daly',gal:'Galileo',hop:'Hopper',joh:'Johnson',mil:'Milstein','new':'Newton',arli:'Arkansas Regional',lake:'Bayou Regional'};
+
+async function psLoad(){
+  var sel=document.getElementById('ps-div-select').value;
+  if(!sel){document.getElementById('ps-status').textContent='Please select a division';return}
+  var year=sel.substring(0,4);
+  var divCode=sel.substring(4);
+  var divName=PS_DIV_NAMES[divCode]||divCode;
+  psDivision=divName;
+  var isPractice=(year==='2025'||divCode==='arli'||divCode==='lake');
+  var status=document.getElementById('ps-status');
+  status.innerHTML='<span class="wx-spin"></span> Loading teams from TBA'+(isPractice?' (practice data)':'')+'...';
+
+  try{
+    var eventKey=sel;
+    var teams=await psFetchTBA('/event/'+eventKey+'/teams');
+    if(!teams||!teams.length){status.textContent='No teams found yet \u2014 division may not be assigned.';return}
+
+    status.innerHTML='<span class="wx-spin"></span> Loading OPRs for '+teams.length+' teams...';
+    var oprs=null;
+    try{oprs=await psFetchTBA('/event/'+eventKey+'/oprs')}catch(e){}
+
+    status.innerHTML='<span class="wx-spin"></span> Loading EPA data...';
+    var epaMap={};
+    try{
+      var epaData=await psFetchStat('/team_events?event='+eventKey+'&limit=200');
+      if(epaData&&Array.isArray(epaData)&&epaData.length>0){
+        epaData.forEach(function(te){
+          var num=te.team||te.team_number||te.num;
+          var epa=te.epa,epaVal=null;
+          if(typeof epa==='object'&&epa!==null){
+            if(epa.total_points&&epa.total_points.mean!=null)epaVal=epa.total_points.mean;
+            else if(epa.unitless!=null)epaVal=epa.unitless;
+          }else if(typeof epa==='number'){epaVal=epa}
+          var pct=te.epa_percentile||te.percentile||null;
+          if(typeof pct!=='number'&&epa&&typeof epa==='object')pct=epa.percentile||null;
+          if(num)epaMap[num]={epa:epaVal,pct:pct};
+        });
+      }
+    }catch(e){}
+
+    if(Object.keys(epaMap).length===0){
+      status.innerHTML='<span class="wx-spin"></span> Loading EPA individually ('+teams.length+' teams)...';
+      for(var i=0;i<teams.length;i++){
+        var tn=teams[i].team_number;
+        try{
+          var s=await psFetchStat('/team_year/'+tn+'/'+year);
+          if(s){
+            var epaRaw=s.epa||s.epa_end||null,epaVal=null;
+            if(typeof epaRaw==='object'&&epaRaw!==null){
+              if(epaRaw.total_points&&epaRaw.total_points.mean!=null)epaVal=epaRaw.total_points.mean;
+              else if(epaRaw.unitless!=null)epaVal=epaRaw.unitless;
+            }else if(typeof epaRaw==='number'){epaVal=epaRaw}
+            epaMap[tn]={epa:epaVal,pct:s.epa_percentile||s.percentile||null};
+          }
+        }catch(e){}
+        if(i%10===9){
+          status.innerHTML='<span class="wx-spin"></span> Loading EPA... '+(i+1)+'/'+teams.length;
+          await new Promise(function(r){setTimeout(r,200)});
+        }
+      }
+    }
+
+    status.innerHTML='<span class="wx-spin"></span> Building team cards...';
+    psTeams=teams.map(function(t){
+      var num=t.team_number;
+      var oprVal=null,dprVal=null;
+      if(oprs&&oprs.oprs){var o=oprs.oprs['frc'+num];if(o!=null)oprVal=Math.round(o*10)/10}
+      if(oprs&&oprs.dprs){var d=oprs.dprs['frc'+num];if(d!=null)dprVal=Math.round(d*10)/10}
+      var epaInfo=epaMap[num]||{};
+      var epaVal=epaInfo.epa!=null?Math.round(epaInfo.epa*10)/10:null;
+      var epaRank='';
+      if(epaInfo.pct!=null){
+        if(epaInfo.pct>=99)epaRank='epa-top1';
+        else if(epaInfo.pct>=90)epaRank='epa-top10';
+        else if(epaInfo.pct>=75)epaRank='epa-top25';
+      }
+      return{
+        num:num, name:t.nickname||t.name||('Team '+num),
+        loc:(t.city||'')+(t.state_prov?', '+t.state_prov:'')+(t.country&&t.country!=='USA'?', '+t.country:''),
+        opr:oprVal, dpr:dprVal, epa:epaVal, epaRank:epaRank,
+        banners:0, awards:0, year:year
+      };
+    });
+
+    var withEpa=psTeams.filter(function(t){return t.epa!=null}).length;
+    var withOpr=psTeams.filter(function(t){return t.opr!=null}).length;
+    status.textContent=(isPractice?'\u26A1 PRACTICE \u2014 ':'')+psTeams.length+' teams loaded for '+divName+' (EPA: '+withEpa+', OPR: '+withOpr+')';
+    document.getElementById('ps-search').style.display='';
+    document.getElementById('ps-filter-bar').style.display='';
+    psRender();
+  }catch(e){
+    status.textContent='Error: '+e.message;
+  }
+}
+
+function psRender(){
+  var list=psTeams.slice();
+  var q=(document.getElementById('ps-search').value||'').toLowerCase();
+  if(q)list=list.filter(function(t){return String(t.num).includes(q)||t.name.toLowerCase().includes(q)||t.loc.toLowerCase().includes(q)});
+  var asc=(psSortDir==='asc');
+  if(psSort==='epa')list.sort(function(a,b){return asc?(a.epa||0)-(b.epa||0):(b.epa||0)-(a.epa||0)});
+  else if(psSort==='opr')list.sort(function(a,b){return asc?(a.opr||0)-(b.opr||0):(b.opr||0)-(a.opr||0)});
+  else if(psSort==='name')list.sort(function(a,b){return asc?a.name.localeCompare(b.name):b.name.localeCompare(a.name)});
+  else list.sort(function(a,b){return asc?b.num-a.num:a.num-b.num});
+
+  document.getElementById('ps-count').textContent=list.length+' teams'+(q?' matching "'+q+'"':' in '+psDivision);
+
+  // Update button arrows
+  document.querySelectorAll('#ps-filter-bar .filter-btn').forEach(function(b){
+    var s=b.getAttribute('data-sort');
+    var arrow=(s==='number')?'':( psSortDir==='desc'?' \u2193':' \u2191');
+    var labels={number:'By Number',epa:'EPA',opr:'OPR',name:'By Name'};
+    b.textContent=labels[s]+(psSort===s&&s!=='number'?arrow:'');
+  });
+
+  var grid=document.getElementById('ps-grid');
+  grid.innerHTML=list.map(function(t){
+    var formBtn=PS_CONFIG.formUrl?'<a class="ps-link" href="'+psFormUrl(t.num)+'" target="_blank" onclick="event.stopPropagation()">\uD83D\uDCCB Scout Form</a>':'<span class="ps-link" style="opacity:.4;cursor:default" title="Set up Google Form first">\uD83D\uDCCB Form TBD</span>';
+    return '<div class="ps-team">'+
+      '<div class="ps-num">'+t.num+'</div>'+
+      '<div class="ps-info">'+
+        '<div class="ps-name">'+t.name+'</div>'+
+        '<div class="ps-loc">'+t.loc+'</div>'+
+        '<div class="ps-stats">'+
+          '<div class="ps-stat '+(t.epaRank||'')+'"><span class="ps-stat-label">EPA</span><span class="ps-stat-val">'+(t.epa!=null?t.epa:'—')+'</span></div>'+
+          '<div class="ps-stat"><span class="ps-stat-label">OPR</span><span class="ps-stat-val">'+(t.opr!=null?t.opr:'—')+'</span></div>'+
+          '<div class="ps-stat"><span class="ps-stat-label">DPR</span><span class="ps-stat-val">'+(t.dpr!=null?t.dpr:'—')+'</span></div>'+
+        '</div>'+
+        (t.banners>0?'<div class="ps-awards">\uD83C\uDFC6 '+t.banners+' blue banner'+(t.banners>1?'s':'')+' \u00B7 '+t.awards+' total awards</div>':'')+
+        '<div class="ps-btns">'+
+          '<a class="ps-link" href="https://www.thebluealliance.com/team/'+t.num+'/'+(t.year||'2026')+'" target="_blank" onclick="event.stopPropagation()">\uD83D\uDD35 TBA</a>'+
+          '<a class="ps-link" href="https://www.statbotics.io/team/'+t.num+'/'+(t.year||'2026')+'" target="_blank" onclick="event.stopPropagation()">\uD83D\uDCCA Stats</a>'+
+          formBtn+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  if(!list.length)grid.innerHTML='<div class="card"><p style="text-align:center">No teams match your search.</p></div>';
+}
+
+function psFilter(){psRender()}
+function psSortBy(s){
+  if(psSort===s){psSortDir=(psSortDir==='desc'?'asc':'desc')}
+  else{psSort=s;psSortDir='desc'}
+  document.querySelectorAll('#ps-filter-bar .filter-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-sort')===s)});
+  psRender();
+}
+
+/* ===== MATCHES TAB ===== */
+var MX_KEY='L20XKYmLjRSsbHPbKyVVXa21xgiRQnSwokWUvLDUUPwP1ymaWkPCbf3vNfFJDOzU';
+var mxEvent='',mxTeam=16,mxCache={};
+
+function mxLoadEvent(){
+  mxEvent=document.getElementById('mx-event').value;
+  if(mxEvent)mxFetchMatches();
+  else document.getElementById('mx-results').innerHTML='<div class="card"><p>Select a division above to load match schedules.</p></div>';
+}
+function mxSelectTeam(num,btn){
+  mxTeam=num;
+  document.querySelectorAll('#mx-team-btns .filter-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  if(mxEvent)mxFetchMatches();
+}
+function mxAddCustomTeam(){
+  var inp=document.getElementById('mx-custom-team');
+  var num=parseInt(inp.value);
+  if(!num||num<1)return;
+  // Check if button already exists
+  var exists=document.querySelector('#mx-team-btns [data-team="'+num+'"]');
+  if(!exists){
+    var btn=document.createElement('button');
+    btn.className='filter-btn';
+    btn.setAttribute('data-team',num);
+    btn.textContent=num;
+    btn.onclick=function(){mxSelectTeam(num,btn)};
+    document.getElementById('mx-team-btns').appendChild(btn);
+  }
+  inp.value='';
+  mxSelectTeam(num,exists||document.querySelector('#mx-team-btns [data-team="'+num+'"]'));
+}
+
+async function mxFetchMatches(){
+  var el=document.getElementById('mx-results');
+  var st=document.getElementById('mx-status');
+  var cacheKey=mxEvent+'_'+mxTeam;
+  if(mxCache[cacheKey]){mxRenderMatches(mxCache[cacheKey]);return}
+  st.textContent='Loading matches for Team '+mxTeam+'...';
+  el.innerHTML='<div class="card"><p style="text-align:center">⏳ Fetching from The Blue Alliance...</p></div>';
+  try{
+    var url='https://www.thebluealliance.com/api/v3/team/frc'+mxTeam+'/event/'+mxEvent+'/matches/simple';
+    var r=await fetch(url,{headers:{'X-TBA-Auth-Key':MX_KEY}});
+    if(!r.ok){
+      if(r.status===404){el.innerHTML='<div class="card"><p>Team '+mxTeam+' is not in this division, or match schedule hasn\'t been published yet.</p></div>';st.textContent='';return}
+      throw 'HTTP '+r.status;
+    }
+    var data=await r.json();
+    mxCache[cacheKey]=data;
+    mxRenderMatches(data);
+    st.textContent='';
+  }catch(e){
+    el.innerHTML='<div class="card"><p>Could not load matches. Check your internet connection.<br><span style="font-size:12px;color:var(--muted)">'+e+'</span></p></div>';
+    st.textContent='';
+  }
+}
+
+function mxRenderMatches(matches){
+  var el=document.getElementById('mx-results');
+  if(!matches||matches.length===0){
+    el.innerHTML='<div class="card"><p>No matches found for Team '+mxTeam+' in this division yet. Match schedule may not be published.</p></div>';
+    return;
+  }
+  // Sort by match number
+  matches.sort(function(a,b){
+    var ao=a.comp_level==='qm'?0:a.comp_level==='sf'?1:2;
+    var bo=b.comp_level==='qm'?0:b.comp_level==='sf'?1:2;
+    if(ao!==bo)return ao-bo;
+    if(a.set_number!==b.set_number)return a.set_number-b.set_number;
+    return a.match_number-b.match_number;
+  });
+  var h='<div style="margin-bottom:8px;color:var(--muted);font-size:13px">'+matches.length+' matches for Team '+mxTeam+' · <a href="https://www.thebluealliance.com/team/'+mxTeam+'/2026" target="_blank" style="color:var(--cyan)">View on TBA →</a></div>';
+  matches.forEach(function(m){
+    var label=m.comp_level==='qm'?'Q'+m.match_number:m.comp_level==='sf'?'SF'+m.set_number+'-'+m.match_number:'F'+m.match_number;
+    var redTeams=m.alliances.red.team_keys.map(function(k){return k.replace('frc','')});
+    var blueTeams=m.alliances.blue.team_keys.map(function(k){return k.replace('frc','')});
+    var isRed=redTeams.indexOf(String(mxTeam))>=0;
+    var isBlue=blueTeams.indexOf(String(mxTeam))>=0;
+    var alliance=isRed?'red':'blue';
+    var redScore=m.alliances.red.score;
+    var blueScore=m.alliances.blue.score;
+    var played=redScore>=0&&blueScore>=0;
+    var won=played&&((isRed&&redScore>blueScore)||(isBlue&&blueScore>redScore));
+    var lost=played&&!won&&redScore!==blueScore;
+    var borderColor=!played?'rgba(201,168,76,.2)':won?'var(--green)':'var(--red)';
+    var resultBadge=!played?'':'<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:'+(won?'rgba(76,175,80,.2);color:var(--green)':'rgba(244,67,54,.2);color:var(--red)')+'">'+( won?'W':'L')+'</span>';
+
+    function teamSpan(num){
+      var n=parseInt(num);
+      var style='';
+      if(n===mxTeam)style='font-weight:700;color:var(--gold)';
+      else if(n===16||n===3937)style='color:var(--cyan)';
+      return '<span style="'+style+'">'+num+'</span>';
+    }
+
+    h+='<div style="background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px;border-left:4px solid '+borderColor+'">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+    h+='<span style="font-family:Oswald;font-size:18px;color:var(--gold)">'+label+'</span>';
+    h+=resultBadge;
+    h+='</div>';
+    // Red alliance
+    h+='<div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">';
+    h+='<span style="background:rgba(244,67,54,.2);color:#F44336;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;width:32px;text-align:center">RED</span>';
+    h+='<span style="font-size:14px">'+redTeams.map(teamSpan).join(' · ')+'</span>';
+    if(played)h+='<span style="margin-left:auto;font-family:Oswald;font-size:16px;color:'+(isRed&&won?'var(--green)':isRed&&lost?'var(--red)':'var(--text)')+'">'+redScore+'</span>';
+    h+='</div>';
+    // Blue alliance
+    h+='<div style="display:flex;gap:8px;align-items:center">';
+    h+='<span style="background:rgba(33,150,243,.2);color:#2196F3;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;width:32px;text-align:center">BLUE</span>';
+    h+='<span style="font-size:14px">'+blueTeams.map(teamSpan).join(' · ')+'</span>';
+    if(played)h+='<span style="margin-left:auto;font-family:Oswald;font-size:16px;color:'+(isBlue&&won?'var(--green)':isBlue&&lost?'var(--red)':'var(--text)')+'">'+blueScore+'</span>';
+    h+='</div>';
+    h+='</div>';
+  });
+  // Win/Loss summary
+  var wins=0,losses=0,ties=0;
+  matches.forEach(function(m){
+    var rs=m.alliances.red.score,bs=m.alliances.blue.score;
+    if(rs<0||bs<0)return;
+    var redTeams=m.alliances.red.team_keys.map(function(k){return k.replace('frc','')});
+    var isRed=redTeams.indexOf(String(mxTeam))>=0;
+    if((isRed&&rs>bs)||(!isRed&&bs>rs))wins++;
+    else if(rs===bs)ties++;
+    else losses++;
+  });
+  if(wins+losses+ties>0){
+    h='<div style="display:flex;gap:12px;margin-bottom:12px;justify-content:center"><div style="text-align:center"><div style="font-family:Oswald;font-size:28px;color:var(--green)">'+wins+'</div><div style="font-size:11px;color:var(--muted)">WINS</div></div><div style="text-align:center"><div style="font-family:Oswald;font-size:28px;color:var(--red)">'+losses+'</div><div style="font-size:11px;color:var(--muted)">LOSSES</div></div>'+(ties?'<div style="text-align:center"><div style="font-family:Oswald;font-size:28px;color:var(--muted)">'+ties+'</div><div style="font-size:11px;color:var(--muted)">TIES</div></div>':'')+'</div>'+h;
+  }
+  el.innerHTML=h;
+}
+// Init matches tab
+document.getElementById('mx-results').innerHTML='<div class="card"><p>Select a division above to load match schedules. Once division assignments are out, pick yours and tap a team to see their matches.</p></div>';
+</script>
+</body>
+</html>
