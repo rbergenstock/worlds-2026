@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BombsAway Scout Game — Worlds 2026</title>
+<meta name="theme-color" content="#2A2957">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Scout Game">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2A2957;--gold:#C9A84C;--dark:#0D0D1A;--card:#151528;--card2:#1A1A35;--text:#E8E8F0;--muted:#8888AA;--cyan:#4FC3F7;--green:#4CAF50;--red:#F44336;--orange:#FF9800;--t1:#2196F3;--t2:#4CAF50;--t3:#9E9E9E}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--dark);color:var(--text);font-family:'Source Sans 3',sans-serif;min-height:100vh;overscroll-behavior:none}
+body{padding:0 0 40px;max-width:900px;margin:0 auto}
+.hdr{background:linear-gradient(180deg,var(--blue),var(--dark));padding:20px 16px;border-bottom:2px solid var(--gold);text-align:center;margin-bottom:16px}
+.hdr h1{font-family:'Oswald';font-size:30px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.hdr .sub{font-size:15px;color:var(--muted);margin-top:4px}
+.container{padding:0 16px}
+.tip-tile{background:linear-gradient(135deg,rgba(42,41,87,.6),rgba(201,168,76,.1));border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:15px;line-height:1.6;color:var(--text)}
+.tip-tile strong{color:var(--gold)}
+.btn{background:var(--gold);color:var(--dark);border:none;border-radius:10px;padding:14px 24px;font-family:'Oswald';font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;width:100%;margin-top:10px}
+.btn:active{transform:scale(.97)}
+.btn-secondary{background:var(--card);color:var(--gold);border:2px solid var(--gold)}
+.btn-tier{background:transparent;color:var(--muted);border:1px solid rgba(201,168,76,.2)}
+.btn-tier.active{background:var(--blue);color:var(--gold);border-color:var(--gold)}
+
+/* Mode picker / Division picker */
+.section{background:var(--card);border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(201,168,76,.15)}
+.section h2{font-family:'Oswald';font-size:19px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.div-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.div-btn{background:var(--card2);color:var(--text);border:2px solid rgba(201,168,76,.15);border-radius:10px;padding:12px 8px;font-family:'Oswald';font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;text-align:center}
+.div-btn .div-sub{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;text-transform:none;letter-spacing:0;font-family:'Source Sans 3',sans-serif}
+.div-btn.active{background:var(--blue);color:var(--gold);border-color:var(--gold)}
+.div-btn:active{transform:scale(.97)}
+
+.mode-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.mode-card{background:var(--card2);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:16px;cursor:pointer;text-align:left;color:var(--text);font-family:'Source Sans 3',sans-serif}
+.mode-card:active{transform:scale(.98)}
+.mode-card .mode-icon{font-size:36px;margin-right:12px;float:left}
+.mode-card .mode-title{font-family:'Oswald';font-size:21px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+.mode-card .mode-desc{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* Loading */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--muted);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.status{font-size:14px;color:var(--muted);text-align:center;padding:14px;min-height:20px}
+
+/* Game header */
+.game-bar{display:flex;justify-content:space-between;align-items:center;background:var(--card);padding:10px 14px;border-radius:10px;margin-bottom:14px;border:1px solid rgba(201,168,76,.15)}
+.game-bar .info{font-size:14px;color:var(--muted)}
+.game-bar .info strong{color:var(--gold);font-size:16px;font-family:'Oswald';letter-spacing:.5px}
+.game-bar .back{background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--gold);border-radius:6px;padding:6px 10px;font-size:14px;cursor:pointer;font-weight:600}
+
+/* Tier badge */
+.tier-badge{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:10px;text-transform:uppercase;font-family:'Source Sans 3',sans-serif;color:#fff}
+.tier-1{background:var(--t1)}
+.tier-2{background:var(--t2)}
+.tier-3{background:var(--t3)}
+
+/* MEMORY MATCH MODE */
+.mem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mem-card{aspect-ratio:1/1;perspective:600px;cursor:pointer}
+.mem-card-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.mem-card.flipped .mem-card-inner{transform:rotateY(180deg)}
+.mem-card.matched .mem-card-inner{transform:rotateY(180deg);opacity:.4}
+.mem-card-front,.mem-card-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;text-align:center;border:1px solid rgba(201,168,76,.3);overflow:hidden}
+.mem-card-front{background:linear-gradient(135deg,var(--blue),#1A1A35)}
+.mem-card-front .logo{font-family:'Oswald';font-size:56px;color:var(--gold);font-weight:700;line-height:1}
+.mem-card-front .logo-sub{font-size:13px;color:var(--muted);letter-spacing:1.5px;margin-top:4px}
+.mem-card-back{background:var(--card);transform:rotateY(180deg)}
+.mem-card-back .num{font-family:'Oswald';font-size:56px;color:var(--gold);font-weight:700;line-height:1}
+.mem-card-back .nm{font-size:20px;color:var(--text);margin-top:4px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-height:2.3em;font-weight:600;padding:0 2px}
+.mem-card-back .tb{margin-top:4px}
+.mem-card-back.t1{border-color:var(--t1);box-shadow:0 0 8px rgba(33,150,243,.3)}
+.mem-card-back.t2{border-color:var(--t2);box-shadow:0 0 8px rgba(76,175,80,.3)}
+.mem-card-back.t3{border-color:var(--t3)}
+
+/* FLASHCARDS MODE */
+.fc-stage{display:flex;flex-direction:column;align-items:center;padding:10px 0}
+.fc-card{width:100%;max-width:340px;aspect-ratio:3/4;perspective:1000px;cursor:pointer;margin-bottom:18px}
+.fc-card-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.fc-card.flipped .fc-card-inner{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;border:2px solid var(--gold)}
+.fc-front{background:linear-gradient(135deg,var(--blue),#1A1A35)}
+.fc-front .fc-prompt{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;font-weight:600}
+.fc-front .fc-big{font-family:'Oswald';font-size:72px;color:var(--gold);font-weight:700;line-height:1;margin-bottom:8px}
+.fc-front .fc-name{font-size:22px;color:var(--text);font-weight:600;line-height:1.3;margin-bottom:4px}
+.fc-front .fc-loc{font-size:14px;color:var(--muted)}
+.fc-front .fc-tap{font-size:13px;color:var(--muted);margin-top:24px;text-transform:uppercase;letter-spacing:1px}
+.fc-back{background:var(--card);transform:rotateY(180deg)}
+.fc-back .fc-num{font-family:'Oswald';font-size:56px;color:var(--gold);font-weight:700;line-height:1;margin-bottom:6px}
+.fc-back .fc-bigname{font-size:22px;color:var(--text);font-weight:600;line-height:1.3;margin-bottom:14px;padding:0 6px}
+.fc-back .fc-tier{margin-bottom:14px}
+.fc-back .fc-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;margin-bottom:14px}
+.fc-back .fc-stat{background:var(--card2);border-radius:6px;padding:6px 8px;text-align:center}
+.fc-back .fc-stat-label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.fc-back .fc-stat-val{display:block;font-size:19px;color:var(--text);font-weight:700}
+.fc-controls{display:flex;gap:10px;width:100%;max-width:340px}
+.fc-controls .btn{flex:1;margin-top:0;padding:12px 8px;font-size:16px}
+.fc-progress{font-size:15px;color:var(--muted);margin-bottom:8px}
+
+/* QUIZ MODE */
+.quiz-stage{padding:6px 0}
+.quiz-q{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:20px;margin-bottom:14px}
+.quiz-q-num{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.quiz-q-text{font-family:'Oswald';font-size:21px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;line-height:1.3;margin-bottom:6px}
+.quiz-q-prompt{font-size:16px;color:var(--text);line-height:1.4}
+.quiz-q-prompt .quiz-team-num{font-family:'Oswald';font-size:44px;color:var(--gold);font-weight:700;display:block;margin:12px 0 4px}
+.quiz-q-prompt .quiz-team-name{font-size:19px;font-weight:600;color:var(--text)}
+.quiz-options{display:grid;grid-template-columns:1fr;gap:8px}
+.quiz-opt{background:var(--card);border:2px solid rgba(201,168,76,.2);border-radius:10px;padding:14px 16px;cursor:pointer;color:var(--text);font-size:17px;font-weight:500;text-align:left;font-family:'Source Sans 3',sans-serif;line-height:1.4}
+.quiz-opt:active{transform:scale(.98)}
+.quiz-opt.correct{background:rgba(76,175,80,.2);border-color:var(--green);color:#A5D6A7}
+.quiz-opt.wrong{background:rgba(244,67,54,.2);border-color:var(--red);color:#EF9A9A}
+.quiz-opt.disabled{cursor:default;pointer-events:none}
+.quiz-feedback{text-align:center;padding:14px;margin-top:12px;border-radius:10px;font-weight:600}
+.quiz-feedback.right{background:rgba(76,175,80,.15);color:var(--green);border:1px solid var(--green)}
+.quiz-feedback.wrong{background:rgba(244,67,54,.15);color:var(--red);border:1px solid var(--red)}
+
+/* End screen */
+.end-screen{text-align:center;padding:30px 20px}
+.end-screen .end-icon{font-size:72px;margin-bottom:16px}
+.end-screen h2{font-family:'Oswald';font-size:32px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+.end-screen .score{font-size:56px;color:var(--text);font-weight:700;font-family:'Oswald';margin:14px 0}
+.end-screen .score-detail{font-size:16px;color:var(--muted);margin-bottom:20px}
+.end-screen .score-pct{font-size:18px;color:var(--cyan);margin-bottom:24px;font-weight:600}
+
+.footer{margin-top:30px;padding:16px;text-align:center;font-size:13px;color:var(--muted);border-top:1px solid rgba(201,168,76,.1)}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+<h1>💣 Scout Game</h1>
+<div class="sub">Worlds 2026 — Learn the field</div>
+</div>
+
+<div class="container">
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen">
+
+<div class="tip-tile">🎮 <strong>Three ways to learn the field</strong> — Memory Match for fun, Flashcards for studying, Quiz for testing yourself. Pick a division, pick a mode, learn the teams.</div>
+
+<div class="section">
+<h2>1. Pick Your Division</h2>
+<div class="div-grid" id="div-grid">
+<button class="div-btn" data-event="2026arc">Archimedes</button>
+<button class="div-btn" data-event="2026cur">Curie</button>
+<button class="div-btn" data-event="2026dal">Daly</button>
+<button class="div-btn active" data-event="2026gal">Galileo<span class="div-sub">Bomb Squad &amp; Breakaway</span></button>
+<button class="div-btn" data-event="2026hop">Hopper<span class="div-sub">Obsidian</span></button>
+<button class="div-btn" data-event="2026joh">Johnson</button>
+<button class="div-btn" data-event="2026mil">Milstein</button>
+<button class="div-btn" data-event="2026new">Newton<span class="div-sub">Goonies</span></button>
+</div>
+</div>
+
+<div class="section" id="tier-section" style="display:none">
+<h2>2. Tier Filter (Optional)</h2>
+<div class="div-grid" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+<button class="div-btn btn-tier active" data-tier="all">All Teams<span class="div-sub" id="tier-all-count">—</span></button>
+<button class="div-btn btn-tier" data-tier="1">Tier 1<span class="div-sub" id="tier-1-count">Rank 1-15</span></button>
+<button class="div-btn btn-tier" data-tier="2">Tier 2<span class="div-sub" id="tier-2-count">Rank 16-40</span></button>
+<button class="div-btn btn-tier" data-tier="3">Tier 3<span class="div-sub" id="tier-3-count">Rank 41+</span></button>
+</div>
+</div>
+
+<div class="section" id="mode-section" style="display:none">
+<h2>3. Pick a Game Mode</h2>
+<div class="mode-grid">
+<button class="mode-card" onclick="startMode('memory')">
+<span class="mode-icon">🃏</span>
+<div class="mode-title">Memory Match</div>
+<div class="mode-desc">Flip pairs of cards. Match the team number to its name. 12 teams (24 cards) per round.</div>
+</button>
+<button class="mode-card" onclick="startMode('flashcards')">
+<span class="mode-icon">📇</span>
+<div class="mode-title">Flashcards</div>
+<div class="mode-desc">Study mode. See team number + name + location, tap to reveal stats and tier. Swipe through the deck.</div>
+</button>
+<button class="mode-card" onclick="startMode('quiz')">
+<span class="mode-icon">🎯</span>
+<div class="mode-title">Quiz</div>
+<div class="mode-desc">Multiple choice. 10 questions about team tiers, EPA rankings, and locations. Score points, beat your record.</div>
+</button>
+</div>
+</div>
+
+<div class="section" id="load-section">
+<button class="btn" onclick="loadDivision()">Load Division Teams</button>
+<div class="status" id="status"></div>
+</div>
+
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen" class="hidden">
+<div class="game-bar">
+<button class="back" onclick="exitGame()">← Back</button>
+<div class="info" id="game-info">—</div>
+<div class="info" id="game-score">—</div>
+</div>
+<div id="game-area"></div>
+</div>
+
+<!-- END SCREEN -->
+<div id="end-screen" class="hidden">
+<div class="end-screen">
+<div class="end-icon" id="end-icon">🎉</div>
+<h2 id="end-title">Game Over</h2>
+<div class="score" id="end-score">—</div>
+<div class="score-detail" id="end-detail">—</div>
+<div class="score-pct" id="end-pct"></div>
+<button class="btn" onclick="restartGame()">Play Again</button>
+<button class="btn btn-secondary" onclick="exitGame()">Pick New Mode</button>
+</div>
+</div>
+
+<div class="footer">
+BombsAway Scout Game · Built for FRC Team 16 Bomb Squad &amp; Team 3937 Breakaway<br>
+Data from The Blue Alliance and Statbotics
+</div>
+
+</div>
+
+<script>
+var CONFIG={
+  tbaKey:'L20XKYmLjRSsbHPbKyVVXa21xgiRQnSwokWUvLDUUPwP1ymaWkPCbf3vNfFJDOzU',
+  tbaBase:'https://www.thebluealliance.com/api/v3',
+  statBase:'https://api.statbotics.io/v3'
+};
+var DIV_NAMES={'2026arc':'Archimedes','2026cur':'Curie','2026dal':'Daly','2026gal':'Galileo','2026hop':'Hopper','2026joh':'Johnson','2026mil':'Milstein','2026new':'Newton'};
+
+var state={
+  selectedEvent:'2026gal',
+  selectedTier:'all',
+  divName:'',
+  teams:[], // sorted by EPA desc; tier assigned by rank
+  filteredTeams:[],
+  mode:null,
+  // memory
+  memCards:[], memFlipped:[], memMatched:0, memMoves:0, memStartTs:0,
+  // flashcards
+  fcDeck:[], fcIndex:0, fcKnown:0, fcUnsure:0,
+  // quiz
+  quizQs:[], quizIndex:0, quizScore:0, quizAnswered:false
+};
+
+// Wire division buttons
+document.querySelectorAll('#div-grid .div-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#div-grid .div-btn').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    state.selectedEvent=b.getAttribute('data-event');
+    // Reset to fresh load
+    state.teams=[];
+    document.getElementById('tier-section').style.display='none';
+    document.getElementById('mode-section').style.display='none';
+    document.getElementById('status').textContent='';
+  });
+});
+
+// Wire tier buttons (set up after DOM ready - they exist already)
+document.querySelectorAll('.btn-tier').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.btn-tier').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    state.selectedTier=b.getAttribute('data-tier');
+    applyTierFilter();
+  });
+});
+
+async function fetchTBA(endpoint){
+  var r=await fetch(CONFIG.tbaBase+endpoint,{headers:{'X-TBA-Auth-Key':CONFIG.tbaKey}});
+  if(!r.ok)return null;return r.json();
+}
+async function fetchStat(endpoint){
+  try{var r=await fetch(CONFIG.statBase+endpoint);if(!r.ok)return null;return r.json()}catch(e){return null}
+}
+
+async function loadDivision(){
+  var status=document.getElementById('status');
+  state.divName=DIV_NAMES[state.selectedEvent]||state.selectedEvent;
+  status.innerHTML='<span class="spin"></span> Loading '+state.divName+' teams from TBA...';
+
+  try{
+    var teams=await fetchTBA('/event/'+state.selectedEvent+'/teams/simple');
+    if(!teams||!teams.length){
+      status.textContent='No teams found yet — division may not have its roster published yet.';
+      return;
+    }
+
+    status.innerHTML='<span class="spin"></span> Fetching EPA for '+teams.length+' teams...';
+    var teamData={};
+    var batchSize=10;
+    for(var bi=0;bi<teams.length;bi+=batchSize){
+      var batch=teams.slice(bi,bi+batchSize);
+      await Promise.all(batch.map(async function(t){
+        var num=t.team_number;
+        var data={epa:null};
+        try{
+          var sb=await fetchStat('/team_year/'+num+'/2026');
+          if(sb){
+            var epa=sb.epa;
+            if(typeof epa==='object'&&epa!==null){
+              if(epa.total_points&&epa.total_points.mean!=null)data.epa=epa.total_points.mean;
+              else if(epa.unitless!=null)data.epa=epa.unitless;
+            }else if(typeof epa==='number')data.epa=epa;
+          }
+        }catch(e){}
+        teamData[num]=data;
+      }));
+      status.innerHTML='<span class="spin"></span> Fetching EPA... '+Math.min(bi+batchSize,teams.length)+'/'+teams.length;
+    }
+
+    // Build, sort by EPA desc, assign tier by rank
+    var built=teams.map(function(t){
+      var num=t.team_number;
+      var d=teamData[num]||{};
+      var epa=d.epa!=null?Math.round(d.epa*10)/10:0;
+      return{
+        num:num, name:t.nickname||t.name||('Team '+num),
+        loc:(t.city||'')+(t.state_prov?', '+t.state_prov:''),
+        country:t.country||'',
+        epa:epa
+      };
+    });
+    built.sort(function(a,b){return b.epa-a.epa});
+    built.forEach(function(t,i){
+      t.rank=i+1;
+      if(t.rank<=15)t.tier=1;
+      else if(t.rank<=40)t.tier=2;
+      else t.tier=3;
+    });
+    state.teams=built;
+
+    // Show tier counts
+    var t1=built.filter(function(t){return t.tier===1}).length;
+    var t2=built.filter(function(t){return t.tier===2}).length;
+    var t3=built.filter(function(t){return t.tier===3}).length;
+    document.getElementById('tier-all-count').textContent=built.length+' teams';
+    document.getElementById('tier-1-count').textContent='Rank 1-15 ('+t1+')';
+    document.getElementById('tier-2-count').textContent='Rank 16-40 ('+t2+')';
+    document.getElementById('tier-3-count').textContent='Rank 41+ ('+t3+')';
+
+    document.getElementById('tier-section').style.display='';
+    document.getElementById('mode-section').style.display='';
+    applyTierFilter();
+    status.textContent='✅ Loaded '+built.length+' teams from '+state.divName;
+  }catch(e){
+    status.textContent='Error loading teams: '+e.message;
+  }
+}
+
+function applyTierFilter(){
+  if(state.selectedTier==='all')state.filteredTeams=state.teams.slice();
+  else{
+    var t=parseInt(state.selectedTier,10);
+    state.filteredTeams=state.teams.filter(function(team){return team.tier===t});
+  }
+}
+
+function startMode(mode){
+  if(!state.teams.length){alert('Load a division first.');return}
+  if(state.filteredTeams.length<4){alert('Not enough teams in this tier for a game (need at least 4).');return}
+  state.mode=mode;
+  document.getElementById('setup-screen').classList.add('hidden');
+  document.getElementById('game-screen').classList.remove('hidden');
+  if(mode==='memory')startMemory();
+  else if(mode==='flashcards')startFlashcards();
+  else if(mode==='quiz')startQuiz();
+}
+
+function exitGame(){
+  document.getElementById('setup-screen').classList.remove('hidden');
+  document.getElementById('game-screen').classList.add('hidden');
+  document.getElementById('end-screen').classList.add('hidden');
+  state.mode=null;
+}
+
+function restartGame(){
+  document.getElementById('end-screen').classList.add('hidden');
+  document.getElementById('game-screen').classList.remove('hidden');
+  if(state.mode==='memory')startMemory();
+  else if(state.mode==='flashcards')startFlashcards();
+  else if(state.mode==='quiz')startQuiz();
+}
+
+function showEnd(icon,title,score,detail,pct){
+  document.getElementById('game-screen').classList.add('hidden');
+  document.getElementById('end-screen').classList.remove('hidden');
+  document.getElementById('end-icon').textContent=icon;
+  document.getElementById('end-title').textContent=title;
+  document.getElementById('end-score').textContent=score;
+  document.getElementById('end-detail').textContent=detail;
+  document.getElementById('end-pct').textContent=pct||'';
+}
+
+function shuffle(a){var x=a.slice();for(var i=x.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=x[i];x[i]=x[j];x[j]=tmp}return x}
+function tierLabel(t){return t===1?'Tier 1':t===2?'Tier 2':'Tier 3'}
+function tierClass(t){return 'tier-'+t}
+
+// =============================================================
+// MEMORY MATCH MODE
+// =============================================================
+function startMemory(){
+  // 12 teams = 24 cards (4x6 grid)
+  var pool=shuffle(state.filteredTeams).slice(0,Math.min(12,state.filteredTeams.length));
+  var cards=[];
+  pool.forEach(function(t,i){
+    cards.push({id:'a'+i,teamId:t.num,team:t,kind:'num'});
+    cards.push({id:'b'+i,teamId:t.num,team:t,kind:'name'});
+  });
+  state.memCards=shuffle(cards);
+  state.memFlipped=[];
+  state.memMatched=0;
+  state.memMoves=0;
+  state.memStartTs=Date.now();
+  document.getElementById('game-info').innerHTML='<strong>Memory Match</strong>';
+  renderMemory();
+  updateMemoryScore();
+}
+
+function renderMemory(){
+  var area=document.getElementById('game-area');
+  area.innerHTML='<div class="mem-grid" id="mem-grid"></div>';
+  var grid=document.getElementById('mem-grid');
+  state.memCards.forEach(function(c,i){
+    var inner;
+    if(c.kind==='num'){
+      inner='<div class="mem-card-back '+tierClass(c.team.tier)+'"><div class="num">'+c.team.num+'</div><div class="tb"><span class="tier-badge '+tierClass(c.team.tier)+'">'+tierLabel(c.team.tier)+'</span></div></div>';
+    }else{
+      inner='<div class="mem-card-back '+tierClass(c.team.tier)+'"><div class="nm">'+c.team.name+'</div><div class="tb"><span class="tier-badge '+tierClass(c.team.tier)+'">'+tierLabel(c.team.tier)+'</span></div></div>';
+    }
+    var html='<div class="mem-card" data-i="'+i+'" onclick="flipMem('+i+')">'+
+      '<div class="mem-card-inner">'+
+        '<div class="mem-card-front"><div class="logo">💣</div><div class="logo-sub">BOMBS AWAY</div></div>'+
+        inner+
+      '</div></div>';
+    grid.insertAdjacentHTML('beforeend',html);
+  });
+}
+
+function updateMemoryScore(){
+  var elapsed=Math.floor((Date.now()-state.memStartTs)/1000);
+  var mins=Math.floor(elapsed/60);
+  var secs=elapsed%60;
+  var time=mins+':'+(secs<10?'0':'')+secs;
+  document.getElementById('game-score').innerHTML='Moves: <strong>'+state.memMoves+'</strong> · '+time;
+}
+
+function flipMem(i){
+  var cardEl=document.querySelectorAll('.mem-card')[i];
+  if(!cardEl||cardEl.classList.contains('matched')||cardEl.classList.contains('flipped'))return;
+  if(state.memFlipped.length>=2)return;
+  cardEl.classList.add('flipped');
+  state.memFlipped.push({i:i,card:state.memCards[i]});
+  if(state.memFlipped.length===2){
+    state.memMoves++;
+    updateMemoryScore();
+    var [a,b]=state.memFlipped;
+    if(a.card.teamId===b.card.teamId&&a.card.kind!==b.card.kind){
+      // Match!
+      setTimeout(function(){
+        document.querySelectorAll('.mem-card')[a.i].classList.add('matched');
+        document.querySelectorAll('.mem-card')[b.i].classList.add('matched');
+        state.memMatched++;
+        state.memFlipped=[];
+        if(state.memMatched===state.memCards.length/2){
+          var elapsed=Math.floor((Date.now()-state.memStartTs)/1000);
+          var mins=Math.floor(elapsed/60);
+          var secs=elapsed%60;
+          var time=mins+':'+(secs<10?'0':'')+secs;
+          var perfect=state.memCards.length/2;
+          var efficiency=Math.round(perfect/state.memMoves*100);
+          showEnd('🏆','Memory Mastered',state.memMoves+' moves',
+            'Time: '+time+' · '+state.memMatched+' pairs matched',
+            efficiency+'% efficiency');
+        }
+      },500);
+    }else{
+      setTimeout(function(){
+        document.querySelectorAll('.mem-card')[a.i].classList.remove('flipped');
+        document.querySelectorAll('.mem-card')[b.i].classList.remove('flipped');
+        state.memFlipped=[];
+      },1100);
+    }
+  }
+}
+
+// =============================================================
+// FLASHCARDS MODE
+// =============================================================
+function startFlashcards(){
+  state.fcDeck=shuffle(state.filteredTeams);
+  state.fcIndex=0;
+  state.fcKnown=0;
+  state.fcUnsure=0;
+  document.getElementById('game-info').innerHTML='<strong>Flashcards</strong>';
+  renderFlashcards();
+}
+
+function renderFlashcards(){
+  if(state.fcIndex>=state.fcDeck.length){
+    showEnd('📚','Deck Complete',state.fcKnown+' / '+state.fcDeck.length,
+      'Knew '+state.fcKnown+' · Marked '+state.fcUnsure+' for review',
+      Math.round(state.fcKnown/state.fcDeck.length*100)+'% known');
+    return;
+  }
+  var t=state.fcDeck[state.fcIndex];
+  document.getElementById('game-score').innerHTML='Card <strong>'+(state.fcIndex+1)+'</strong> / '+state.fcDeck.length;
+  var area=document.getElementById('game-area');
+  area.innerHTML=
+    '<div class="fc-stage">'+
+      '<div class="fc-progress">Tap card to flip</div>'+
+      '<div class="fc-card" id="fc-card" onclick="this.classList.toggle(\'flipped\')">'+
+        '<div class="fc-card-inner">'+
+          '<div class="fc-front">'+
+            '<div class="fc-prompt">Who is this?</div>'+
+            '<div class="fc-big">'+t.num+'</div>'+
+            '<div class="fc-name">'+t.name+'</div>'+
+            '<div class="fc-loc">'+(t.loc||'')+'</div>'+
+            '<div class="fc-tap">Tap to reveal stats</div>'+
+          '</div>'+
+          '<div class="fc-back">'+
+            '<div class="fc-num">'+t.num+'</div>'+
+            '<div class="fc-bigname">'+t.name+'</div>'+
+            '<div class="fc-tier"><span class="tier-badge '+tierClass(t.tier)+'">'+tierLabel(t.tier)+' · Rank #'+t.rank+'</span></div>'+
+            '<div class="fc-stats">'+
+              '<div class="fc-stat"><span class="fc-stat-label">EPA</span><span class="fc-stat-val">'+t.epa+'</span></div>'+
+              '<div class="fc-stat"><span class="fc-stat-label">Division Rank</span><span class="fc-stat-val">#'+t.rank+'</span></div>'+
+            '</div>'+
+            '<div class="fc-loc" style="font-size:13px;color:var(--muted)">'+(t.loc||'')+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="fc-controls">'+
+        '<button class="btn btn-secondary" onclick="fcMark(false)">⟳ Review Later</button>'+
+        '<button class="btn" onclick="fcMark(true)">✓ Got It</button>'+
+      '</div>'+
+    '</div>';
+}
+function fcMark(known){
+  if(known)state.fcKnown++;else state.fcUnsure++;
+  state.fcIndex++;
+  renderFlashcards();
+}
+
+// =============================================================
+// QUIZ MODE
+// =============================================================
+var QUIZ_LEN=10;
+function startQuiz(){
+  state.quizQs=buildQuizQuestions();
+  state.quizIndex=0;
+  state.quizScore=0;
+  state.quizAnswered=false;
+  document.getElementById('game-info').innerHTML='<strong>Quiz</strong>';
+  renderQuiz();
+}
+
+function buildQuizQuestions(){
+  var teams=state.filteredTeams.slice();
+  if(teams.length<4)return[];
+  var qs=[];
+  var qTypes=['tier','rank-range','top-team','epa-compare'];
+  for(var i=0;i<QUIZ_LEN&&i<teams.length;i++){
+    var team=teams[Math.floor(Math.random()*teams.length)];
+    var qType=qTypes[Math.floor(Math.random()*qTypes.length)];
+    var q=null;
+    if(qType==='tier')q=qTier(team,teams);
+    else if(qType==='rank-range')q=qRankRange(team,teams);
+    else if(qType==='top-team')q=qTopTeam(teams);
+    else if(qType==='epa-compare')q=qEpaCompare(teams);
+    if(q)qs.push(q);
+    else i--;
+  }
+  return qs.slice(0,QUIZ_LEN);
+}
+
+function qTier(team,allTeams){
+  var correct=tierLabel(team.tier);
+  var options=['Tier 1','Tier 2','Tier 3'];
+  return{
+    type:'TIER',
+    text:'Which tier is this team?',
+    promptHtml:'<span class="quiz-team-num">'+team.num+'</span><span class="quiz-team-name">'+team.name+'</span>',
+    options:options,
+    correct:correct
+  };
+}
+
+function qRankRange(team,allTeams){
+  var correctRange;
+  if(team.rank<=15)correctRange='Rank 1-15';
+  else if(team.rank<=40)correctRange='Rank 16-40';
+  else correctRange='Rank 41+';
+  return{
+    type:'RANK',
+    text:"Where does this team rank in the division by EPA?",
+    promptHtml:'<span class="quiz-team-num">'+team.num+'</span><span class="quiz-team-name">'+team.name+'</span>',
+    options:['Rank 1-15','Rank 16-40','Rank 41+'],
+    correct:correctRange
+  };
+}
+
+function qTopTeam(allTeams){
+  // From 4 random teams, pick the one with highest EPA
+  var pool=shuffle(allTeams).slice(0,Math.min(4,allTeams.length));
+  if(pool.length<2)return null;
+  var top=pool.reduce(function(a,b){return a.epa>b.epa?a:b});
+  return{
+    type:'HIGHEST EPA',
+    text:'Which team has the highest EPA?',
+    promptHtml:pool.map(function(t){return t.num}).join(' · '),
+    options:pool.map(function(t){return t.num+' — '+t.name}),
+    correct:top.num+' — '+top.name
+  };
+}
+
+function qEpaCompare(allTeams){
+  // Pick 2 teams - which has higher EPA?
+  var pool=shuffle(allTeams).slice(0,2);
+  if(pool.length<2)return null;
+  var [a,b]=pool;
+  if(a.epa===b.epa)return null;
+  var winner=a.epa>b.epa?a:b;
+  return{
+    type:'HEAD TO HEAD',
+    text:'Higher EPA?',
+    promptHtml:'<span style="font-size:16px;color:var(--muted);display:block;margin-top:8px">'+a.num+' '+a.name+'<br>vs<br>'+b.num+' '+b.name+'</span>',
+    options:[a.num+' — '+a.name,b.num+' — '+b.name],
+    correct:winner.num+' — '+winner.name
+  };
+}
+
+function renderQuiz(){
+  if(state.quizIndex>=state.quizQs.length){
+    var pct=Math.round(state.quizScore/state.quizQs.length*100);
+    var icon=pct>=80?'🏆':pct>=60?'🎯':pct>=40?'📈':'📚';
+    var title=pct>=80?'Scout Master':pct>=60?'Solid Scout':pct>=40?'Keep Studying':'Back to Flashcards';
+    showEnd(icon,title,state.quizScore+' / '+state.quizQs.length,
+      'You got '+state.quizScore+' right out of '+state.quizQs.length,
+      pct+'% correct');
+    return;
+  }
+  var q=state.quizQs[state.quizIndex];
+  document.getElementById('game-score').innerHTML='Score: <strong>'+state.quizScore+'</strong> / '+state.quizIndex;
+  var area=document.getElementById('game-area');
+  state.quizAnswered=false;
+  var optsHtml=shuffle(q.options).map(function(o,i){
+    return '<button class="quiz-opt" data-opt="'+escapeAttr(o)+'" onclick="answerQuiz(this)">'+o+'</button>';
+  }).join('');
+  area.innerHTML=
+    '<div class="quiz-stage">'+
+      '<div class="quiz-q">'+
+        '<div class="quiz-q-num">Question '+(state.quizIndex+1)+' of '+state.quizQs.length+' · '+q.type+'</div>'+
+        '<div class="quiz-q-text">'+q.text+'</div>'+
+        '<div class="quiz-q-prompt">'+q.promptHtml+'</div>'+
+      '</div>'+
+      '<div class="quiz-options" id="quiz-options">'+optsHtml+'</div>'+
+      '<div id="quiz-feedback"></div>'+
+    '</div>';
+}
+
+function escapeAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+
+function answerQuiz(btn){
+  if(state.quizAnswered)return;
+  state.quizAnswered=true;
+  var picked=btn.getAttribute('data-opt');
+  var q=state.quizQs[state.quizIndex];
+  var correct=q.correct;
+  var allOpts=document.querySelectorAll('.quiz-opt');
+  allOpts.forEach(function(el){
+    el.classList.add('disabled');
+    var v=el.getAttribute('data-opt');
+    if(v===correct)el.classList.add('correct');
+    else if(v===picked&&v!==correct)el.classList.add('wrong');
+  });
+  var feedbackEl=document.getElementById('quiz-feedback');
+  if(picked===correct){
+    state.quizScore++;
+    feedbackEl.innerHTML='<div class="quiz-feedback right">✅ Correct!</div>';
+  }else{
+    feedbackEl.innerHTML='<div class="quiz-feedback wrong">✗ Correct answer: '+correct+'</div>';
+  }
+  setTimeout(function(){
+    state.quizIndex++;
+    renderQuiz();
+  },1600);
+}
+</script>
+
+</body>
+</html>
