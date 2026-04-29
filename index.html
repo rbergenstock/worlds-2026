@@ -24,6 +24,7 @@
 .sched-day{font-family:'Oswald';font-size:18px;color:var(--gold);padding:12px 0 6px;border-bottom:1px solid rgba(201,168,76,.2);margin-bottom:8px}.sched-item{display:flex;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;gap:12px;align-items:flex-start}.sched-time{color:var(--gold);font-weight:600;min-width:75px;flex-shrink:0;font-size:13px}.sched-desc{flex:1}.sched-desc strong{color:var(--text)}.sched-desc .note{color:var(--muted);font-size:12px;display:block;margin-top:2px}.sched-item.critical{background:rgba(244,67,54,.08);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.critical .sched-time{color:var(--red)}.sched-item.highlight{background:rgba(201,168,76,.06);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.meal{background:rgba(76,175,80,.06);border-radius:8px;padding:10px 8px;margin:2px -8px}.sched-item.meal .sched-time{color:var(--green)}.uniform-tag{display:inline-block;background:rgba(42,41,87,.6);color:var(--cyan);font-size:11px;padding:2px 10px;border-radius:4px;margin-bottom:8px;font-weight:600}
 .filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.filter-btn{background:var(--card);color:var(--muted);border:1px solid rgba(201,168,76,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;font-family:'Source Sans 3',sans-serif}.filter-btn.active{background:var(--gold);color:var(--dark);border-color:var(--gold)}
 .link-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.link-card{background:var(--card);border-radius:12px;padding:16px 14px;text-align:center;text-decoration:none;border:1px solid rgba(201,168,76,.1);transition:all .15s}.link-card:active{transform:scale(.96);background:var(--card2)}.link-card .link-icon{font-size:28px;display:block;margin-bottom:6px}.link-card .link-label{color:var(--gold);font-family:'Oswald';font-size:13px;text-transform:uppercase;letter-spacing:.5px}.link-card .link-sub{color:var(--muted);font-size:11px;margin-top:2px}
+.scout-app-btn{display:block;background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:18px 16px;margin-bottom:12px;text-decoration:none;transition:all .15s;text-align:left}.scout-app-btn:active{transform:scale(.97);background:var(--card2)}.scout-app-btn .sab-icon{font-size:32px;display:inline-block;margin-right:10px;vertical-align:middle}.scout-app-btn .sab-label{display:inline-block;color:var(--gold);font-family:'Oswald';font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}.scout-app-btn .sab-sub{display:block;color:var(--muted);font-size:13px;margin-top:8px;margin-left:4px;line-height:1.4}
 .countdown{background:linear-gradient(135deg,var(--blue),#3D3D80);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;border:2px solid var(--gold)}.countdown h2{color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:3px;margin-bottom:12px}.countdown-nums{display:flex;justify-content:center;gap:16px}.cd-unit{text-align:center}.cd-num{font-family:'Oswald';font-size:42px;color:white;font-weight:700;line-height:1}.cd-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
 .meal-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid var(--green)}.meal-card h4{color:var(--green);font-family:'Oswald';font-size:15px;text-transform:uppercase}.meal-card p{color:var(--muted);font-size:13px;line-height:1.5;margin-top:4px}.meal-card .cost{color:var(--gold);font-weight:700}
 .wx-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}.wx-card{background:var(--card);border-radius:12px;padding:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;-webkit-tap-highlight-color:transparent}.wx-card:active{transform:scale(.98)}.wx-card.selected{border-color:var(--gold);background:var(--card2)}.wx-card .wx-loc{font-family:'Oswald';font-size:15px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.wx-card .wx-main{display:flex;align-items:center;gap:12px}.wx-card .wx-icon{font-size:36px;flex-shrink:0}.wx-card .wx-temp{font-family:'Oswald';font-size:38px;color:white;font-weight:700;line-height:1}.wx-card .wx-cond{font-size:13px;color:var(--muted)}.wx-card .wx-details{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:10px;font-size:12px;color:var(--muted)}.wx-card .wx-details span{display:flex;justify-content:space-between}.wx-card .wx-details .val{color:var(--text);font-weight:600}.wx-card .wx-updated{font-size:10px;color:var(--muted);margin-top:8px;opacity:.6}.wx-card.denied{border:1px dashed rgba(201,168,76,.3);cursor:default}.wx-card.denied .wx-loc{color:var(--muted)}.wx-card.loading .wx-main{opacity:.5}
@@ -232,65 +233,35 @@ Convention center is <strong>CASH FREE</strong> — bring a card or preload a Vi
 <div class="card"><h3>📝 Local Weather Notes</h3><p id="wx-notes-area" style="min-height:40px;font-style:italic">Late April in Houston: expect highs in the mid-80s°F with humidity around 70–80%. The convention center is air-conditioned but walks outside will be warm. Pack light clothing, sunscreen, water bottle, and a light jacket for indoor AC.</p></div>
 </div>
 <div class="tab" id="tab-scout">
-<div class="tip-tile">🔍 <strong>Prescouting</strong> — Your homework before Worlds. <strong>Step 1:</strong> Pick the division (Galileo for Bomb Squad &amp; Breakaway, Newton for Goonies). <strong>Step 2:</strong> Teams load with EPA, rank, record, and OPR/DPR. <strong>Step 3:</strong> Sort by EPA, OPR, or rank. <strong>Step 4:</strong> Pick your team in the form dropdown, then tap GO to open the scouting form pre-filled.</div>
-<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">PRESCOUTING</h2>
-<div class="ps-instructions">
-<h3>📋 Match Watching Instructions</h3>
-<ol>
-<li>Find their <span class="ps-tip">BEST match</span> (highest score) — What are they capable of at peak performance?</li>
-<li>Find their <span class="ps-tip">WORST match</span> (lowest score) — What do they look like when things go wrong?</li>
-<li>Find <span class="ps-tip">ONE IN THE MIDDLE</span> — What does a typical match look like for them?</li>
-<li>Watch for: <span class="ps-tip">drivetrain, auto fuel, cycle times, climb level, defense ability</span></li>
-<li>After watching, pick your team in the form dropdown and tap GO to fill out the scouting form</li>
-</ol>
+<div class="tip-tile">🔍 <strong>Scouting</strong> — Everything you need for scouting at Worlds. Tap a button below to open the dedicated app. <strong>Add each one to your home screen</strong> for one-tap access during competition. They all work offline once loaded.</div>
+<h2 style="color:var(--gold);font-size:18px;margin-bottom:12px">SCOUTING APPS</h2>
+
+<a class="scout-app-btn" href="BombsAway_Prescouting.html" target="_blank" rel="noopener">
+<span class="sab-icon">🔍</span>
+<span class="sab-label">Prescouting App</span>
+<span class="sab-sub">75 Galileo teams • EPA / OPR / rank • Tap GO to open form</span>
+</a>
+
+<a class="scout-app-btn" href="Bomb_Squad_Worlds_Schedule.html" target="_blank" rel="noopener">
+<span class="sab-icon">📋</span>
+<span class="sab-label">Scout Schedule</span>
+<span class="sab-sub">Pick your name → see only YOUR shifts. Pit walks Wed, Quals Thu &amp; Fri.</span>
+</a>
+
+<a class="scout-app-btn" href="BombsAway_Scout_Game.html" target="_blank" rel="noopener">
+<span class="sab-icon">🎮</span>
+<span class="sab-label">Scout Game</span>
+<span class="sab-sub">Memory match, flashcards, quiz — learn the Galileo field</span>
+</a>
+
+<div class="card" style="margin-top:16px;border-left:4px solid var(--gold)">
+<h3>📋 What goes where</h3>
+<p style="font-size:13px;line-height:1.6">
+<strong style="color:var(--gold)">Prescouting App</strong> — pick a team, watch their TBA matches, fill out the form. Use BEFORE Wednesday pit walks to fill in homework gaps.<br><br>
+<strong style="color:var(--gold)">Scout Schedule</strong> — open this every shift to know where you should be. Pit assignments for Wednesday are in the WED PITS tab.<br><br>
+<strong style="color:var(--gold)">Scout Game</strong> — bus ride homework. Three modes (Memory Match, Flashcards, Quiz) to learn Galileo teams cold. Beat each other's scores.
+</p>
 </div>
-<div class="ps-divpicker">
-<button class="ps-divpicker-btn active" data-event="2026gal" onclick="psPickDiv('2026gal',this)">Galileo<span class="div-team">Bomb Squad &amp; Breakaway</span></button>
-<button class="ps-divpicker-btn" data-event="2026new" onclick="psPickDiv('2026new',this)">Newton<span class="div-team">Goonies</span></button>
-</div>
-<div class="ps-setup" id="ps-setup">
-<h3>🔍 Load Division Teams</h3>
-<p>Pick a division above, then tap Load. Or use the dropdown for a different event (practice mode).</p>
-<select class="ps-input" id="ps-div-select" style="appearance:auto;-webkit-appearance:auto">
-<option value="">— Other event (practice) —</option>
-<optgroup label="2026 Worlds Divisions">
-<option value="2026arc">Archimedes</option>
-<option value="2026cur">Curie</option>
-<option value="2026dal">Daly</option>
-<option value="2026gal">Galileo</option>
-<option value="2026hop">Hopper</option>
-<option value="2026joh">Johnson</option>
-<option value="2026mil">Milstein</option>
-<option value="2026new">Newton</option>
-</optgroup>
-<optgroup label="2025 Worlds (Practice)">
-<option value="2025arc">Archimedes (2025)</option>
-<option value="2025cur">Curie (2025)</option>
-<option value="2025dal">Daly (2025)</option>
-<option value="2025gal">Galileo (2025)</option>
-<option value="2025hop">Hopper (2025)</option>
-<option value="2025joh">Johnson (2025)</option>
-<option value="2025mil">Milstein (2025)</option>
-<option value="2025new">Newton (2025)</option>
-</optgroup>
-<optgroup label="Our 2026 Events (Practice)">
-<option value="2026arli">Arkansas Regional (2026)</option>
-<option value="2026lake">Bayou Regional (2026)</option>
-</optgroup>
-</select>
-<button class="ps-btn" onclick="psLoad()">Load Teams</button>
-<div class="ps-status" id="ps-status"></div>
-</div>
-<input type="text" class="ps-search" id="ps-search" placeholder="🔍 Search by team number or name..." oninput="psFilter()" style="display:none">
-<div class="ps-filter-bar" id="ps-filter-bar" style="display:none">
-<button class="filter-btn active" data-sort="number" onclick="psSortBy('number')">By Number</button>
-<button class="filter-btn" data-sort="epa" onclick="psSortBy('epa')">EPA</button>
-<button class="filter-btn" data-sort="rank" onclick="psSortBy('rank')">Rank</button>
-<button class="filter-btn" data-sort="opr" onclick="psSortBy('opr')">OPR</button>
-<button class="filter-btn" data-sort="name" onclick="psSortBy('name')">By Name</button>
-</div>
-<div class="ps-count" id="ps-count"></div>
-<div class="ps-grid" id="ps-grid"></div>
 </div>
 <div class="tab" id="tab-links">
 <div class="tip-tile">🔗 <strong>Quick Links</strong> — One-tap access to everything: The Blue Alliance, Statbotics, FIRST Events, venue maps, transit info, all 8 division pages, and our team pages. Bookmark these for the week — you'll use TBA and Statbotics constantly during competition.</div>
@@ -565,10 +536,15 @@ async function psLoad(){
         try{
           var events=await psFetchTBA('/team/frc'+num+'/events/'+year+'/simple');
           if(events&&events.length){
-            data.eventCount=events.length;
-            for(var ei=0;ei<events.length;ei++){
-              var ek=events[ei].key;
-              if(ek===sel)continue;
+            var today=new Date().toISOString().substring(0,10);
+            var completedEvents=events.filter(function(ev){
+              if(ev.key===sel)return false;
+              if(!ev.end_date)return false;
+              return ev.end_date<today;
+            });
+            data.eventCount=completedEvents.length;
+            for(var ei=0;ei<completedEvents.length;ei++){
+              var ek=completedEvents[ei].key;
               try{
                 var ev=await psFetchTBA('/event/'+ek+'/oprs');
                 if(ev){
