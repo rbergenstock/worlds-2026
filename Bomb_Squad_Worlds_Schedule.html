@@ -2,350 +2,258 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2A2957">
-<title>Bomb Squad — Worlds Scout Schedule</title>
+<title>Scout Schedule — Bomb Squad Worlds 2026</title>
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; }
+:root {
+  --blue: #2A2957;
+  --gold: #C9A84C;
+  --dark: #0D0D1A;
+  --darker: #080812;
+  --card: #151528;
+  --card2: #1A1A35;
+  --text: #E8E8F0;
+  --muted: #8888AA;
+  --red: #F44336;
+  --green: #4CAF50;
+  --orange: #FF9800;
+  --cyan: #00BCD4;
+}
+html { height: 100%; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #0D0D1A;
-  color: #E0E0E0;
-  font-size: 16px;
+  margin: 0;
+  background: var(--dark);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
   line-height: 1.5;
-  padding-bottom: 60px;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding: 0 0 calc(70px + env(safe-area-inset-bottom, 0px));
 }
-.banner {
-  background: #2A2957;
-  color: #C9A84C;
+.header {
+  background: linear-gradient(135deg, var(--blue), #1E1E45);
+  padding: 14px 16px 10px;
   text-align: center;
-  padding: 16px 12px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  border-bottom: 3px solid var(--gold);
 }
-.banner h1 {
+.header h1 {
   margin: 0;
   font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
   font-weight: 800;
+  text-transform: uppercase;
+}
+.header .sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
   letter-spacing: 1px;
 }
-.banner .sub {
-  font-size: 12px;
-  color: #FFFFFF;
-  opacity: 0.85;
-  margin-top: 2px;
-}
-nav {
+.tabbar {
   display: flex;
-  background: #1A1A2E;
-  border-bottom: 2px solid #2A2957;
-  position: sticky;
-  top: 60px;
-  z-index: 9;
+  background: var(--card);
+  border-bottom: 2px solid var(--blue);
 }
-nav button {
+.tabbar button {
   flex: 1;
   background: transparent;
   border: none;
-  color: #C9A84C;
+  color: var(--muted);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
   padding: 12px 4px;
   cursor: pointer;
   border-bottom: 3px solid transparent;
-  transition: all 0.2s;
 }
-nav button.active {
-  background: #2A2957;
-  border-bottom-color: #C9A84C;
+.tabbar button.active {
+  background: var(--blue);
+  color: var(--gold);
+  border-bottom-color: var(--gold);
 }
-section { display: none; padding: 12px; }
-section.active { display: block; }
+.content { padding: 12px; }
+.tab { display: none; }
+.tab.active { display: block; }
 h2 {
-  color: #C9A84C;
-  font-size: 17px;
-  margin: 16px 0 8px;
-  border-bottom: 2px solid #2A2957;
+  color: var(--gold);
+  font-size: 16px;
+  margin: 14px 0 8px;
+  border-bottom: 2px solid var(--blue);
   padding-bottom: 6px;
   letter-spacing: 0.5px;
 }
 h3 {
-  color: #C9A84C;
-  font-size: 15px;
-  margin: 16px 0 4px;
+  color: var(--gold);
+  font-size: 14px;
+  margin: 14px 0 4px;
   font-weight: 700;
 }
 .shift {
-  background: #1A1A2E;
-  border-left: 4px solid #C9A84C;
+  background: var(--card);
+  border-left: 4px solid var(--gold);
   border-radius: 6px;
   margin-bottom: 12px;
   padding: 10px 12px;
 }
 .shift.lunch {
-  border-left-color: #4CAF50;
+  border-left-color: var(--green);
   text-align: center;
   font-style: italic;
-  color: #999;
-  background: #14141F;
+  color: var(--muted);
+  background: var(--darker);
   padding: 14px;
 }
 .shift-time {
-  color: #C9A84C;
+  color: var(--gold);
   font-weight: 800;
-  font-size: 15px;
+  font-size: 14px;
   margin-bottom: 6px;
-}
-.shift-note {
-  color: #888;
-  font-size: 12px;
-  margin-bottom: 8px;
 }
 .positions {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 50px 1fr;
   gap: 6px 8px;
   font-size: 14px;
 }
-.pos {
-  font-weight: 700;
-  text-align: right;
-  padding-right: 6px;
-}
-.red { color: #FF5252; }
-.blue { color: #4FC3F7; }
-.gold { color: #C9A84C; }
-.green { color: #4CAF50; }
-.gray { color: #888; }
-.mybox {
-  background: #C9A84C;
-  color: #0D0D1A;
-  padding: 1px 6px;
-  border-radius: 3px;
-  font-weight: 800;
-  font-size: 13px;
-  display: inline-block;
-}
+.pos { font-weight: 700; text-align: right; padding-right: 6px; }
+.red { color: var(--red); }
+.blue { color: var(--cyan); }
+.gold { color: var(--gold); }
+.green { color: var(--green); }
+.gray { color: var(--muted); }
 .you-shift {
   border-left-color: #FFD600 !important;
-  background: #1F1A0A !important;
-  box-shadow: 0 0 0 1px #FFD600;
+  background: rgba(255, 214, 0, 0.08) !important;
+  box-shadow: 0 0 0 1px rgba(255, 214, 0, 0.4);
 }
 .column {
-  background: #1A1A2E;
-  border-left: 4px solid #2A2957;
+  background: var(--card);
+  border-left: 4px solid var(--blue);
   border-radius: 6px;
   padding: 10px 12px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .column-header {
-  color: #C9A84C;
+  color: var(--gold);
   font-weight: 800;
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 4px;
 }
 .column-meta {
-  color: #888;
+  color: var(--muted);
   font-size: 12px;
   margin-bottom: 10px;
 }
 .team-row {
   display: grid;
-  grid-template-columns: 50px 60px 1fr 24px;
+  grid-template-columns: 44px 56px 1fr 22px;
   gap: 4px;
   padding: 6px 0;
-  border-top: 1px solid #2A2957;
+  border-top: 1px solid var(--blue);
   font-size: 14px;
   align-items: center;
 }
-.pit-label {
-  color: #888;
+.pit-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+.team-num { color: var(--gold); font-weight: 700; }
+.team-name { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.priority { color: #FFD600; font-size: 14px; text-align: center; }
+.us-row { background: rgba(201, 168, 76, 0.15); border-radius: 4px; padding: 6px 4px; }
+.mybox {
+  background: var(--gold);
+  color: var(--dark);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 800;
   font-size: 12px;
-  font-weight: 700;
-}
-.team-num {
-  color: #C9A84C;
-  font-weight: 700;
-}
-.team-name {
-  color: #E0E0E0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.priority {
-  color: #FFD600;
-  font-size: 14px;
-  text-align: center;
-}
-.us-row {
-  background: rgba(201,168,76,0.15);
-  border-radius: 4px;
-  padding: 6px 4px;
 }
 .legend {
-  background: #1A1A2E;
+  background: var(--card);
   border-radius: 6px;
   padding: 10px 12px;
-  margin: 12px 0;
+  margin: 10px 0;
   font-size: 13px;
-  color: #aaa;
-  line-height: 1.7;
+  color: var(--muted);
+  line-height: 1.6;
 }
+.legend strong { color: var(--gold); }
 .btn {
   display: block;
-  background: #2A2957;
-  color: #C9A84C;
+  background: var(--blue);
+  color: var(--gold);
   text-align: center;
   padding: 14px;
   margin: 12px 0;
   border-radius: 8px;
   font-weight: 800;
   text-decoration: none;
-  border: 2px solid #C9A84C;
+  border: 2px solid var(--gold);
   font-size: 15px;
 }
-.tip {
-  background: rgba(76,175,80,0.1);
-  border-left: 3px solid #4CAF50;
-  padding: 8px 10px;
-  margin: 8px 0;
-  font-size: 13px;
-  color: #c5e1c5;
-  border-radius: 0 4px 4px 0;
-}
-.tally {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 8px 0;
-  font-size: 14px;
-}
-.tally th, .tally td {
-  padding: 8px 6px;
-  border-bottom: 1px solid #2A2957;
-  text-align: center;
-}
-.tally th {
-  background: #2A2957;
-  color: #C9A84C;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-}
-.tally td:first-child {
-  text-align: left;
-  font-weight: 700;
-  color: #E0E0E0;
-}
-.htrow td:first-child { color: #FFD600; }
-.foot {
-  text-align: center;
-  color: #555;
-  font-size: 11px;
-  padding: 20px 12px;
-  border-top: 1px solid #2A2957;
-  margin-top: 20px;
-}
 .scout-find {
-  background: #1A1A2E;
+  background: var(--card);
   border-radius: 8px;
   padding: 12px;
   margin: 12px 0;
 }
+.scout-find label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
 .scout-find select {
   width: 100%;
-  background: #0D0D1A;
-  color: #C9A84C;
-  border: 2px solid #2A2957;
+  background: var(--darker);
+  color: var(--gold);
+  border: 2px solid var(--blue);
   padding: 12px;
   border-radius: 6px;
   font-size: 16px;
   font-family: inherit;
   font-weight: 700;
 }
-.scout-find label {
-  display: block;
-  color: #888;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-#myShifts { margin-top: 14px; }
 #myShifts:empty { display: none; }
-</style>
-
-<style>
-
-/* ===== Bomb Squad Command Center nav (iOS Safari compatible) ===== */
-:root {
-  --cc-blue: #2A2957;
-  --cc-gold: #C9A84C;
-  --cc-muted: #8888AA;
-}
-html { height: 100%; }
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
-  box-sizing: border-box;
-}
+/* ===== Bomb Squad Command Center nav ===== */
 .cc-nav {
-  position: fixed;
-  position: -webkit-sticky;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
-  background: #2A2957;
-  display: -webkit-box;
-  display: -webkit-flex;
+  background: var(--blue);
   display: flex;
   z-index: 9999;
-  border-top: 2px solid #C9A84C;
+  border-top: 2px solid var(--gold);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  /* Force own stacking context — fixes iOS Safari rendering quirks */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   will-change: transform;
 }
 .cc-nav-btn {
-  -webkit-flex: 1;
   flex: 1;
   padding: 8px 4px 6px;
   text-align: center;
-  color: #8888AA;
+  color: var(--muted);
   border: none;
   background: none;
-  cursor: pointer;
-  -webkit-transition: all .2s;
-  transition: all .2s;
   text-decoration: none;
   font-family: inherit;
   display: block;
 }
 .cc-nav-btn.active {
-  color: #C9A84C;
+  color: var(--gold);
   background: rgba(201, 168, 76, .1);
 }
-.cc-nav-btn:active {
-  background: rgba(201, 168, 76, .15);
-}
-.cc-nav-btn .cc-icon {
-  font-size: 20px;
-  display: block;
-  line-height: 1.2;
-}
+.cc-nav-btn .cc-icon { font-size: 20px; display: block; line-height: 1.2; }
 .cc-nav-label {
   font-size: 9px;
   text-transform: uppercase;
@@ -354,48 +262,41 @@ body {
   display: block;
   color: inherit;
 }
-
 </style>
 </head>
 <body>
-<div class="banner">
-  <h1>💣 BOMB SQUAD WORLDS 2026</h1>
-  <div class="sub">Galileo Division • Scout Schedule</div>
+<div class="header"><h1>SCOUT SCHEDULE</h1><div class="sub">Galileo Division • Worlds 2026</div></div>
+<div class="tabbar">
+<button class="tab-btn active" data-tab="me">MY SHIFTS</button>
+<button class="tab-btn" data-tab="pit">WED PITS</button>
+<button class="tab-btn" data-tab="thu">THURSDAY</button>
+<button class="tab-btn" data-tab="fri">FRIDAY</button>
 </div>
-
-<nav>
-  <button class="tab-btn active" data-tab="me">MY SHIFTS</button>
-  <button class="tab-btn" data-tab="pit">WED PITS</button>
-  <button class="tab-btn" data-tab="thu">THURSDAY</button>
-  <button class="tab-btn" data-tab="fri">FRIDAY</button>
-</nav>
-
-<section id="me" class="active">
-  <div class="scout-find">
-    <label>Pick your name</label>
-    <select id="scoutSelect">
-      <option value="">— Choose your name —</option>
-      <option value="Jackson">Jackson</option>
-      <option value="Pacecar">Pacecar</option>
-      <option value="Lydia">Lydia</option>
-      <option value="Suned">Suned</option>
-      <option value="Dooley">Dooley</option>
-      <option value="Retro">Retro</option>
-      <option value="Aldyn">Aldyn</option>
-      <option value="Haevynne">Haevynne</option>
-      <option value="Trinity">Trinity</option>
-    </select>
-  </div>
-  <div id="myShifts"></div>
-  <div class="legend">
-    <strong style="color:#C9A84C">Tip:</strong> Pick your name above and your phone will remember it. You'll see ONLY your shifts, when to be there, and which position. Tap the WED PITS / THURSDAY / FRIDAY tabs above for full schedules.
-  </div>
-</section>
-<section id="pit">
+<div class="content">
+<div class="tab active" id="tab-me">
+<div class="scout-find">
+<label>Pick your name</label>
+<select id="scoutSelect">
+<option value="">— Choose your name —</option>
+<option value="Jackson">Jackson</option>
+<option value="Pacecar">Pacecar</option>
+<option value="Lydia">Lydia</option>
+<option value="Suned">Suned</option>
+<option value="Dooley">Dooley</option>
+<option value="Retro">Retro</option>
+<option value="Aldyn">Aldyn</option>
+<option value="Haevynne">Haevynne</option>
+<option value="Trinity">Trinity</option>
+</select>
+</div>
+<div id="myShifts"></div>
+<div class="legend"><strong>Tip:</strong> Pick your name above and your phone will remember it. You'll see ONLY your shifts. Tap WED PITS / THURSDAY / FRIDAY tabs above for full schedules.</div>
+</div>
+<div class="tab" id="tab-pit">
 <h2>🔧 Wednesday Pit Scouting</h2>
 <div class="legend">Pit walks open Wednesday afternoon. ⭐ = no prescout data yet — <strong>HIT THESE FIRST</strong></div>
-<a class="btn" href="https://rbergenstock.github.io/worlds-2026/BombsAway_Prescouting.html" target="_blank">Open Prescout Form →</a>
-<div class="legend"><strong style="color:#C9A84C">Our pits:</strong> F08 Bomb Squad • G14 Breakaway</div>
+<a class="btn" href="https://rbergenstock.github.io/worlds-2026/BombsAway_Prescouting.html">Open Prescout Form →</a>
+<div class="legend"><strong>Our pits:</strong> F08 Bomb Squad • G14 Breakaway</div>
 <div class="column">
 <div class="column-header">Column E — Dooley + Suned + Aldyn</div>
 <div class="column-meta">20 teams • 4 priority ⭐</div>
@@ -489,192 +390,122 @@ body {
 </div>
 <h3>What to ask in each pit</h3>
 <div class="legend">• Drivetrain (swerve / tank / mecanum)<br>• Auto routine + how many fuel<br>• Cycles per shift in teleop<br>• Climb level (L1/L2/L3) + reliability<br>• Defense — do they play it?<br>• Main weakness / what tends to break</div>
-</section><section id="thu">
+</div>
+<div class="tab" id="tab-thu">
 <h2>📋 Thursday — Apr 30</h2>
 <div class="legend">Be at your station <strong>5 minutes before shift starts</strong>. Galileo lunch is 12:00–1:30 PM.</div>
-<div class="shift" data-shift="S1 (8:00-10:00 AM)">
+<div class="shift">
 <div class="shift-time">S1 — 8:00-10:00 AM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Jackson</span>
-<span class="pos red">R2</span><span class="scout">Pacecar</span>
-<span class="pos red">R3</span><span class="scout">Lydia</span>
-<span class="pos blue">B1</span><span class="scout">Suned</span>
-<span class="pos blue">B2</span><span class="scout">Dooley</span>
-<span class="pos blue">B3</span><span class="scout">Trinity</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Haevynne</span>
-<span class="pos gray">OFF</span><span class="scout gray">Aldyn, Retro</span>
+<span class="pos red">R1</span><span>Jackson</span>
+<span class="pos red">R2</span><span>Pacecar</span>
+<span class="pos red">R3</span><span>Lydia</span>
+<span class="pos blue">B1</span><span>Suned</span>
+<span class="pos blue">B2</span><span>Dooley</span>
+<span class="pos blue">B3</span><span>Trinity</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Haevynne</span>
+<span class="pos gray">OFF</span><span class="gray">Aldyn, Retro</span>
 </div>
 </div>
-<div class="shift" data-shift="S2 (10:00 AM-12:00 PM)">
+<div class="shift">
 <div class="shift-time">S2 — 10:00 AM-12:00 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Jackson</span>
-<span class="pos red">R2</span><span class="scout">Pacecar</span>
-<span class="pos red">R3</span><span class="scout">Suned</span>
-<span class="pos blue">B1</span><span class="scout">Retro</span>
-<span class="pos blue">B2</span><span class="scout">Aldyn</span>
-<span class="pos blue">B3</span><span class="scout">Haevynne</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Trinity</span>
-<span class="pos gray">OFF</span><span class="scout gray">Lydia, Dooley</span>
+<span class="pos red">R1</span><span>Jackson</span>
+<span class="pos red">R2</span><span>Pacecar</span>
+<span class="pos red">R3</span><span>Suned</span>
+<span class="pos blue">B1</span><span>Retro</span>
+<span class="pos blue">B2</span><span>Aldyn</span>
+<span class="pos blue">B3</span><span>Haevynne</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Trinity</span>
+<span class="pos gray">OFF</span><span class="gray">Lydia, Dooley</span>
 </div>
 </div>
 <div class="shift lunch">🍔 LUNCH 12:00–1:30 PM (Galileo break)</div>
-<div class="shift" data-shift="S3 (1:30-3:30 PM)">
+<div class="shift">
 <div class="shift-time">S3 — 1:30-3:30 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Aldyn</span>
-<span class="pos red">R2</span><span class="scout">Lydia</span>
-<span class="pos red">R3</span><span class="scout">Suned</span>
-<span class="pos blue">B1</span><span class="scout">Pacecar</span>
-<span class="pos blue">B2</span><span class="scout">Dooley</span>
-<span class="pos blue">B3</span><span class="scout">Retro</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Trinity</span>
-<span class="pos gray">OFF</span><span class="scout gray">Jackson, Haevynne (off)</span>
+<span class="pos red">R1</span><span>Aldyn</span>
+<span class="pos red">R2</span><span>Lydia</span>
+<span class="pos red">R3</span><span>Suned</span>
+<span class="pos blue">B1</span><span>Pacecar</span>
+<span class="pos blue">B2</span><span>Dooley</span>
+<span class="pos blue">B3</span><span>Retro</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Trinity</span>
+<span class="pos gray">OFF</span><span class="gray">Jackson, Haevynne (off)</span>
 </div>
 </div>
-<div class="shift" data-shift="S4 (3:30-5:30 PM)">
+<div class="shift">
 <div class="shift-time">S4 — 3:30-5:30 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Dooley</span>
-<span class="pos red">R2</span><span class="scout">Retro</span>
-<span class="pos red">R3</span><span class="scout">Aldyn</span>
-<span class="pos blue">B1</span><span class="scout">Jackson</span>
-<span class="pos blue">B2</span><span class="scout">Lydia</span>
-<span class="pos blue">B3</span><span class="scout">Suned</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Haevynne</span>
-<span class="pos gray">OFF</span><span class="scout gray">Pacecar, Trinity (off)</span>
+<span class="pos red">R1</span><span>Dooley</span>
+<span class="pos red">R2</span><span>Retro</span>
+<span class="pos red">R3</span><span>Aldyn</span>
+<span class="pos blue">B1</span><span>Jackson</span>
+<span class="pos blue">B2</span><span>Lydia</span>
+<span class="pos blue">B3</span><span>Suned</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Haevynne</span>
+<span class="pos gray">OFF</span><span class="gray">Pacecar, Trinity (off)</span>
 </div>
 </div>
-</section><section id="fri">
+</div>
+<div class="tab" id="tab-fri">
 <h2>📋 Friday — May 1</h2>
 <div class="legend">Be at your station <strong>5 minutes before shift starts</strong>. Galileo lunch is 12:00–1:30 PM.</div>
-<div class="shift" data-shift="S1 (8:00-10:00 AM)">
+<div class="shift">
 <div class="shift-time">S1 — 8:00-10:00 AM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Lydia</span>
-<span class="pos red">R2</span><span class="scout">Dooley</span>
-<span class="pos red">R3</span><span class="scout">Retro</span>
-<span class="pos blue">B1</span><span class="scout">Aldyn</span>
-<span class="pos blue">B2</span><span class="scout">Jackson</span>
-<span class="pos blue">B3</span><span class="scout">Pacecar</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Haevynne</span>
-<span class="pos gray">OFF</span><span class="scout gray">Suned, Trinity (off)</span>
+<span class="pos red">R1</span><span>Lydia</span>
+<span class="pos red">R2</span><span>Dooley</span>
+<span class="pos red">R3</span><span>Retro</span>
+<span class="pos blue">B1</span><span>Aldyn</span>
+<span class="pos blue">B2</span><span>Jackson</span>
+<span class="pos blue">B3</span><span>Pacecar</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Haevynne</span>
+<span class="pos gray">OFF</span><span class="gray">Suned, Trinity (off)</span>
 </div>
 </div>
-<div class="shift" data-shift="S2 (10:00 AM-12:00 PM)">
+<div class="shift">
 <div class="shift-time">S2 — 10:00 AM-12:00 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Suned</span>
-<span class="pos red">R2</span><span class="scout">Dooley</span>
-<span class="pos red">R3</span><span class="scout">Jackson</span>
-<span class="pos blue">B1</span><span class="scout">Pacecar</span>
-<span class="pos blue">B2</span><span class="scout">Lydia</span>
-<span class="pos blue">B3</span><span class="scout">Haevynne</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Trinity</span>
-<span class="pos gray">OFF</span><span class="scout gray">Retro, Aldyn</span>
+<span class="pos red">R1</span><span>Suned</span>
+<span class="pos red">R2</span><span>Dooley</span>
+<span class="pos red">R3</span><span>Jackson</span>
+<span class="pos blue">B1</span><span>Pacecar</span>
+<span class="pos blue">B2</span><span>Lydia</span>
+<span class="pos blue">B3</span><span>Haevynne</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Trinity</span>
+<span class="pos gray">OFF</span><span class="gray">Retro, Aldyn</span>
 </div>
 </div>
 <div class="shift lunch">🍔 LUNCH 12:00–1:30 PM (Galileo break)</div>
-<div class="shift" data-shift="S3 (1:30-3:30 PM)">
+<div class="shift">
 <div class="shift-time">S3 — 1:30-3:30 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Aldyn</span>
-<span class="pos red">R2</span><span class="scout">Retro</span>
-<span class="pos red">R3</span><span class="scout">Suned</span>
-<span class="pos blue">B1</span><span class="scout">Jackson</span>
-<span class="pos blue">B2</span><span class="scout">Pacecar</span>
-<span class="pos blue">B3</span><span class="scout">Dooley</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Trinity</span>
-<span class="pos gray">OFF</span><span class="scout gray">Lydia, Haevynne (off)</span>
+<span class="pos red">R1</span><span>Aldyn</span>
+<span class="pos red">R2</span><span>Retro</span>
+<span class="pos red">R3</span><span>Suned</span>
+<span class="pos blue">B1</span><span>Jackson</span>
+<span class="pos blue">B2</span><span>Pacecar</span>
+<span class="pos blue">B3</span><span>Dooley</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Trinity</span>
+<span class="pos gray">OFF</span><span class="gray">Lydia, Haevynne (off)</span>
 </div>
 </div>
-<div class="shift" data-shift="S4 (3:30-5:30 PM)">
+<div class="shift">
 <div class="shift-time">S4 — 3:30-5:30 PM</div>
 <div class="positions">
-<span class="pos red">R1</span><span class="scout">Lydia</span>
-<span class="pos red">R2</span><span class="scout">Suned</span>
-<span class="pos red">R3</span><span class="scout">Aldyn</span>
-<span class="pos blue">B1</span><span class="scout">Retro</span>
-<span class="pos blue">B2</span><span class="scout">Pacecar</span>
-<span class="pos blue">B3</span><span class="scout">Trinity</span>
-<span class="pos green">📷</span><span class="scout green">MEDIA: Haevynne</span>
-<span class="pos gray">OFF</span><span class="scout gray">Dooley, Jackson</span>
+<span class="pos red">R1</span><span>Lydia</span>
+<span class="pos red">R2</span><span>Suned</span>
+<span class="pos red">R3</span><span>Aldyn</span>
+<span class="pos blue">B1</span><span>Retro</span>
+<span class="pos blue">B2</span><span>Pacecar</span>
+<span class="pos blue">B3</span><span>Trinity</span>
+<span class="pos green">📷</span><span class="green">MEDIA: Haevynne</span>
+<span class="pos gray">OFF</span><span class="gray">Dooley, Jackson</span>
 </div>
 </div>
-</section><script>var SCHEDULE_DATA = {"thursday": {"S1 (8:00-10:00 AM)": {"R1": "Jackson", "R2": "Pacecar", "R3": "Lydia", "B1": "Suned", "B2": "Dooley", "B3": "Trinity", "OFF": "Aldyn, Retro", "MEDIA": "Haevynne"}, "S2 (10:00 AM-12:00 PM)": {"R1": "Jackson", "R2": "Pacecar", "R3": "Suned", "B1": "Retro", "B2": "Aldyn", "B3": "Haevynne", "OFF": "Lydia, Dooley", "MEDIA": "Trinity"}, "S3 (1:30-3:30 PM)": {"R1": "Aldyn", "R2": "Lydia", "R3": "Suned", "B1": "Pacecar", "B2": "Dooley", "B3": "Retro", "OFF": "Jackson, Haevynne (off)", "MEDIA": "Trinity"}, "S4 (3:30-5:30 PM)": {"R1": "Dooley", "R2": "Retro", "R3": "Aldyn", "B1": "Jackson", "B2": "Lydia", "B3": "Suned", "OFF": "Pacecar, Trinity (off)", "MEDIA": "Haevynne"}}, "friday": {"S1 (8:00-10:00 AM)": {"R1": "Lydia", "R2": "Dooley", "R3": "Retro", "B1": "Aldyn", "B2": "Jackson", "B3": "Pacecar", "OFF": "Suned, Trinity (off)", "MEDIA": "Haevynne"}, "S2 (10:00 AM-12:00 PM)": {"R1": "Suned", "R2": "Dooley", "R3": "Jackson", "B1": "Pacecar", "B2": "Lydia", "B3": "Haevynne", "OFF": "Retro, Aldyn", "MEDIA": "Trinity"}, "S3 (1:30-3:30 PM)": {"R1": "Aldyn", "R2": "Retro", "R3": "Suned", "B1": "Jackson", "B2": "Pacecar", "B3": "Dooley", "OFF": "Lydia, Haevynne (off)", "MEDIA": "Trinity"}, "S4 (3:30-5:30 PM)": {"R1": "Lydia", "R2": "Suned", "R3": "Aldyn", "B1": "Retro", "B2": "Pacecar", "B3": "Trinity", "OFF": "Dooley, Jackson", "MEDIA": "Haevynne"}}};</script>
-<div class="foot">
-  Bomb Squad 16 • Galileo F08<br>
-  Steel sharpens steel.
 </div>
-
-<script>
-(function(){
-  // tab switching
-  var tabs = document.querySelectorAll('.tab-btn');
-  var sections = document.querySelectorAll('section');
-  tabs.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var tab = btn.dataset.tab;
-      tabs.forEach(function(b){ b.classList.toggle('active', b===btn); });
-      sections.forEach(function(s){ s.classList.toggle('active', s.id===tab); });
-      window.scrollTo(0,0);
-    });
-  });
-
-  // remember scout name
-  var sel = document.getElementById('scoutSelect');
-  var saved = '';
-  try { saved = localStorage.getItem('bombsquad_scout') || ''; } catch(e){}
-  if (saved) sel.value = saved;
-  function refreshMyShifts() {
-    var name = sel.value;
-    try { localStorage.setItem('bombsquad_scout', name); } catch(e){}
-    var box = document.getElementById('myShifts');
-    if (!name) { box.innerHTML = ''; return; }
-
-    var schedule = SCHEDULE_DATA;
-    var html = '<h2>📅 ' + name + "'s Shifts</h2>";
-
-    ['thursday','friday'].forEach(function(day){
-      var dayLabel = day === 'thursday' ? 'Thursday — Apr 30' : 'Friday — May 1';
-      var anyShift = false;
-      var dayHtml = '<h3>' + dayLabel + '</h3>';
-
-      Object.keys(schedule[day]).forEach(function(shift){
-        var pos = schedule[day][shift];
-        var role = null;
-        var pos_key = null;
-        ['R1','R2','R3','B1','B2','B3'].forEach(function(k){
-          if (pos[k] === name) { role='SCOUT'; pos_key=k; }
-        });
-        if (pos.MEDIA && pos.MEDIA.indexOf(name) !== -1) role = 'MEDIA';
-        if (!role && pos.OFF && pos.OFF.indexOf(name) !== -1) role = 'OFF';
-
-        if (role) {
-          anyShift = true;
-          var time = shift.split('(')[1] ? shift.split('(')[1].replace(')','') : shift;
-          var shiftCode = shift.split(' (')[0];
-          var color = role === 'SCOUT' ? '#C9A84C' : (role === 'MEDIA' ? '#4CAF50' : '#888');
-          var roleLabel = role;
-          if (role === 'SCOUT') roleLabel = 'SCOUT • ' + pos_key;
-
-          dayHtml += '<div class="shift you-shift">';
-          dayHtml += '<div class="shift-time">' + shiftCode + ' — ' + time + '</div>';
-          dayHtml += '<div style="font-size:18px;font-weight:800;color:' + color + ';margin-top:4px">' + roleLabel + '</div>';
-          dayHtml += '</div>';
-        }
-      });
-
-      if (anyShift) html += dayHtml;
-    });
-
-    box.innerHTML = html;
-  }
-  sel.addEventListener('change', refreshMyShifts);
-  refreshMyShifts();
-})();
-</script>
-
+</div>
 <nav class="cc-nav">
 <a class="cc-nav-btn" href="index.html"><span class="cc-icon">🏠</span><span class="cc-nav-label">Home</span></a>
 <a class="cc-nav-btn" href="index.html#schedule"><span class="cc-icon">📅</span><span class="cc-nav-label">Schedule</span></a>
@@ -684,5 +515,55 @@ body {
 <a class="cc-nav-btn active" href="index.html#scout"><span class="cc-icon">🔍</span><span class="cc-nav-label">Scout</span></a>
 <a class="cc-nav-btn" href="index.html#links"><span class="cc-icon">🔗</span><span class="cc-nav-label">Links</span></a>
 </nav>
-</body>
-</html>
+<script>
+var SCHEDULE_DATA = {"thursday": {"S1 (8:00-10:00 AM)": {"R1": "Jackson", "R2": "Pacecar", "R3": "Lydia", "B1": "Suned", "B2": "Dooley", "B3": "Trinity", "OFF": "Aldyn, Retro", "MEDIA": "Haevynne"}, "S2 (10:00 AM-12:00 PM)": {"R1": "Jackson", "R2": "Pacecar", "R3": "Suned", "B1": "Retro", "B2": "Aldyn", "B3": "Haevynne", "OFF": "Lydia, Dooley", "MEDIA": "Trinity"}, "S3 (1:30-3:30 PM)": {"R1": "Aldyn", "R2": "Lydia", "R3": "Suned", "B1": "Pacecar", "B2": "Dooley", "B3": "Retro", "OFF": "Jackson, Haevynne (off)", "MEDIA": "Trinity"}, "S4 (3:30-5:30 PM)": {"R1": "Dooley", "R2": "Retro", "R3": "Aldyn", "B1": "Jackson", "B2": "Lydia", "B3": "Suned", "OFF": "Pacecar, Trinity (off)", "MEDIA": "Haevynne"}}, "friday": {"S1 (8:00-10:00 AM)": {"R1": "Lydia", "R2": "Dooley", "R3": "Retro", "B1": "Aldyn", "B2": "Jackson", "B3": "Pacecar", "OFF": "Suned, Trinity (off)", "MEDIA": "Haevynne"}, "S2 (10:00 AM-12:00 PM)": {"R1": "Suned", "R2": "Dooley", "R3": "Jackson", "B1": "Pacecar", "B2": "Lydia", "B3": "Haevynne", "OFF": "Retro, Aldyn", "MEDIA": "Trinity"}, "S3 (1:30-3:30 PM)": {"R1": "Aldyn", "R2": "Retro", "R3": "Suned", "B1": "Jackson", "B2": "Pacecar", "B3": "Dooley", "OFF": "Lydia, Haevynne (off)", "MEDIA": "Trinity"}, "S4 (3:30-5:30 PM)": {"R1": "Lydia", "R2": "Suned", "R3": "Aldyn", "B1": "Retro", "B2": "Pacecar", "B3": "Trinity", "OFF": "Dooley, Jackson", "MEDIA": "Haevynne"}}};
+
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var sections = document.querySelectorAll('.tab');
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var tab = btn.dataset.tab;
+      tabs.forEach(function(b){ b.classList.toggle('active', b===btn); });
+      sections.forEach(function(s){ s.classList.toggle('active', s.id==='tab-'+tab); });
+      window.scrollTo(0,0);
+    });
+  });
+
+  var sel = document.getElementById('scoutSelect');
+  var saved = '';
+  try { saved = localStorage.getItem('bombsquad_scout') || ''; } catch(e){}
+  if (saved) sel.value = saved;
+  function refresh(){
+    var name = sel.value;
+    try { localStorage.setItem('bombsquad_scout', name); } catch(e){}
+    var box = document.getElementById('myShifts');
+    if (!name){ box.innerHTML=''; return; }
+    var html = '<h2>📅 '+name+"'s Shifts</h2>";
+    ['thursday','friday'].forEach(function(day){
+      var label = day==='thursday' ? 'Thursday — Apr 30' : 'Friday — May 1';
+      var shown=false, dayHtml='<h3>'+label+'</h3>';
+      Object.keys(SCHEDULE_DATA[day]).forEach(function(shift){
+        var p = SCHEDULE_DATA[day][shift], role=null, posKey=null;
+        ['R1','R2','R3','B1','B2','B3'].forEach(function(k){ if(p[k]===name){role='SCOUT';posKey=k;} });
+        if (p.MEDIA && p.MEDIA.indexOf(name)!==-1) role='MEDIA';
+        if (!role && p.OFF && p.OFF.indexOf(name)!==-1) role='OFF';
+        if (role){
+          shown=true;
+          var time = shift.split('(')[1] ? shift.split('(')[1].replace(')','') : shift;
+          var code = shift.split(' (')[0];
+          var color = role==='SCOUT' ? '#C9A84C' : (role==='MEDIA' ? '#4CAF50' : '#8888AA');
+          var roleLabel = role==='SCOUT' ? 'SCOUT • '+posKey : role;
+          dayHtml += '<div class="shift you-shift"><div class="shift-time">'+code+' — '+time+'</div><div style="font-size:18px;font-weight:800;color:'+color+';margin-top:4px">'+roleLabel+'</div></div>';
+        }
+      });
+      if (shown) html += dayHtml;
+    });
+    box.innerHTML = html;
+  }
+  sel.addEventListener('change', refresh);
+  refresh();
+})();
+
+</script>
+</body></html>
