@@ -280,6 +280,62 @@ h3 {
 #myShifts { margin-top: 14px; }
 #myShifts:empty { display: none; }
 </style>
+<style>
+
+/* ===== Bomb Squad Command Center nav (consistent with main app) ===== */
+:root {
+  --cc-blue: #2A2957;
+  --cc-gold: #C9A84C;
+  --cc-muted: #8888AA;
+}
+.cc-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--cc-blue);
+  display: flex;
+  z-index: 9999;
+  border-top: 2px solid var(--cc-gold);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.cc-nav-btn {
+  flex: 1;
+  padding: 8px 4px 6px;
+  text-align: center;
+  color: var(--cc-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  font-family: inherit;
+}
+.cc-nav-btn.active {
+  color: var(--cc-gold);
+  background: rgba(201, 168, 76, .1);
+}
+.cc-nav-btn:active {
+  background: rgba(201, 168, 76, .15);
+}
+.cc-nav-btn .cc-icon {
+  font-size: 20px;
+  display: block;
+}
+.cc-nav-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: 2px;
+  display: block;
+  color: inherit;
+}
+body {
+  padding-bottom: 70px !important;
+}
+
+</style>
 </head>
 <body>
 <div class="banner">
@@ -598,5 +654,14 @@ h3 {
   refreshMyShifts();
 })();
 </script>
+<nav class="cc-nav">
+<a class="cc-nav-btn" href="index.html"><span class="cc-icon">🏠</span><span class="cc-nav-label">Home</span></a>
+<a class="cc-nav-btn" href="index.html#schedule"><span class="cc-icon">📅</span><span class="cc-nav-label">Schedule</span></a>
+<a class="cc-nav-btn" href="index.html#matches"><span class="cc-icon">⚔️</span><span class="cc-nav-label">Matches</span></a>
+<a class="cc-nav-btn" href="index.html#meals"><span class="cc-icon">🍽️</span><span class="cc-nav-label">Meals</span></a>
+<a class="cc-nav-btn" href="index.html#weather"><span class="cc-icon">🌤️</span><span class="cc-nav-label">Weather</span></a>
+<a class="cc-nav-btn active" href="index.html#scout"><span class="cc-icon">🔍</span><span class="cc-nav-label">Scout</span></a>
+<a class="cc-nav-btn" href="index.html#links"><span class="cc-icon">🔗</span><span class="cc-nav-label">Links</span></a>
+</nav>
 </body>
 </html>
