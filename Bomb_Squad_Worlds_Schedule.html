@@ -280,40 +280,62 @@ h3 {
 #myShifts { margin-top: 14px; }
 #myShifts:empty { display: none; }
 </style>
+
 <style>
 
-/* ===== Bomb Squad Command Center nav (consistent with main app) ===== */
+/* ===== Bomb Squad Command Center nav (iOS Safari compatible) ===== */
 :root {
   --cc-blue: #2A2957;
   --cc-gold: #C9A84C;
   --cc-muted: #8888AA;
 }
+html { height: 100%; }
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box;
+}
 .cc-nav {
+  position: fixed;
+  position: -webkit-sticky;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--cc-blue);
+  width: 100%;
+  background: #2A2957;
+  display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
   z-index: 9999;
-  border-top: 2px solid var(--cc-gold);
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  border-top: 2px solid #C9A84C;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Force own stacking context — fixes iOS Safari rendering quirks */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 .cc-nav-btn {
+  -webkit-flex: 1;
   flex: 1;
   padding: 8px 4px 6px;
   text-align: center;
-  color: var(--cc-muted);
+  color: #8888AA;
   border: none;
   background: none;
   cursor: pointer;
+  -webkit-transition: all .2s;
   transition: all .2s;
   text-decoration: none;
   font-family: inherit;
+  display: block;
 }
 .cc-nav-btn.active {
-  color: var(--cc-gold);
+  color: #C9A84C;
   background: rgba(201, 168, 76, .1);
 }
 .cc-nav-btn:active {
@@ -322,6 +344,7 @@ h3 {
 .cc-nav-btn .cc-icon {
   font-size: 20px;
   display: block;
+  line-height: 1.2;
 }
 .cc-nav-label {
   font-size: 9px;
@@ -330,9 +353,6 @@ h3 {
   margin-top: 2px;
   display: block;
   color: inherit;
-}
-body {
-  padding-bottom: 70px !important;
 }
 
 </style>
@@ -654,6 +674,7 @@ body {
   refreshMyShifts();
 })();
 </script>
+
 <nav class="cc-nav">
 <a class="cc-nav-btn" href="index.html"><span class="cc-icon">🏠</span><span class="cc-nav-label">Home</span></a>
 <a class="cc-nav-btn" href="index.html#schedule"><span class="cc-icon">📅</span><span class="cc-nav-label">Schedule</span></a>
